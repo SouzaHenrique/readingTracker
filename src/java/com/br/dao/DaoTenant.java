@@ -1,10 +1,39 @@
 package java.com.br.dao;
 
+import java.com.br.Factory.ConnectionFactory;
+import java.com.br.model.PessoaModel;
+import java.com.br.model.TenantModel;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DaoTenant implements Dao{
     @Override
     public boolean Save(Object object) {
+
+        PessoaModel oPessoa = null;
+        if(object instanceof PessoaModel){
+            oPessoa = (PessoaModel) object;
+        }else
+        {
+            return false;
+        }
+
+        TenantModel oTenant = new TenantModel();
+        oTenant.setId_pessoa(oTenant.getId_pessoa());
+
+        String comando = "insert into Tenant(id_pessoa) values (?)";
+
+        try {
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setInt(1, oPessoa.getId());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return false;
     }
 

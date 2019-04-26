@@ -7,20 +7,19 @@ public class PessoaModel {
     private int Id;
     private String Nome;
     private String Sobrenome;
-    private Date DataNascimento;
+    private String DataNascimento;
     private String Email;
     private String Senha;
+    private int statusPessoa;
 
-    public PessoaModel() {
-    }
-
-    public PessoaModel(int id, String nome, String sobrenome, Date dataNascimento, String email, String senha) {
+    public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, int statusPessoa) {
         Id = id;
         Nome = nome;
         Sobrenome = sobrenome;
         DataNascimento = dataNascimento;
         Email = email;
         Senha = senha;
+        this.statusPessoa = statusPessoa;
     }
 
     public int getId() {
@@ -47,11 +46,11 @@ public class PessoaModel {
         Sobrenome = sobrenome;
     }
 
-    public Date getDataNascimento() {
+    public String getDataNascimento() {
         return DataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(String dataNascimento) {
         DataNascimento = dataNascimento;
     }
 
@@ -71,7 +70,16 @@ public class PessoaModel {
         Senha = senha;
     }
 
+    public int getStatusPessoa() {
+        return statusPessoa;
+    }
 
-
+    public void setStatusPessoa(int statusPessoa) {
+        this.statusPessoa = statusPessoa;
+    }
 
 }
+
+
+
+
