@@ -2,7 +2,7 @@ package java.com.br.model;
 
 import java.util.Date;
 
-public class Livro {
+public class LivroModel {
 
     private int Id;
     private String Titulo;
@@ -12,7 +12,17 @@ public class Livro {
     private int QuantidadePaginas;
     private long QuantidadeLeituras;
 
-    public Livro() {
+    public LivroModel() {
+    }
+
+    public LivroModel(int id, String titulo, String autor, Date anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeituras) {
+        Id = id;
+        Titulo = titulo;
+        Autor = autor;
+        AnoPublicacao = anoPublicacao;
+        Editora = editora;
+        QuantidadePaginas = quantidadePaginas;
+        QuantidadeLeituras = quantidadeLeituras;
     }
 
     public int getId() {
@@ -71,13 +81,5 @@ public class Livro {
         QuantidadeLeituras = quantidadeLeituras;
     }
 
-    public Livro(int id, String titulo, String autor, Date anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeituras) {
-        Id = id;
-        Titulo = titulo;
-        Autor = autor;
-        AnoPublicacao = anoPublicacao;
-        Editora = editora;
-        QuantidadePaginas = quantidadePaginas;
-        QuantidadeLeituras = quantidadeLeituras;
-    }
+
 }

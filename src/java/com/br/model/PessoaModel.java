@@ -1,15 +1,8 @@
 package java.com.br.model;
 
-/*
-*  @author Davi Lima - 24/04 18:54:35
-*
-*   Definição: Esta classe implementa os atributos de uma Pessoa conforme a especificação
-*
-* */
-
 import java.util.Date;
 
-public class Pessoa {
+public class PessoaModel {
 
     private int Id;
     private String Nome;
@@ -18,7 +11,16 @@ public class Pessoa {
     private String Email;
     private String Senha;
 
-    public Pessoa() {
+    public PessoaModel() {
+    }
+
+    public PessoaModel(int id, String nome, String sobrenome, Date dataNascimento, String email, String senha) {
+        Id = id;
+        Nome = nome;
+        Sobrenome = sobrenome;
+        DataNascimento = dataNascimento;
+        Email = email;
+        Senha = senha;
     }
 
     public int getId() {
@@ -69,14 +71,7 @@ public class Pessoa {
         Senha = senha;
     }
 
-    public Pessoa(int id, String nome, String sobrenome, Date dataNascimento, String email, String senha) {
-        Id = id;
-        Nome = nome;
-        Sobrenome = sobrenome;
-        DataNascimento = dataNascimento;
-        Email = email;
-        Senha = senha;
-    }
+
 
 
 }

@@ -1,11 +1,16 @@
 package java.com.br.model;
 
-public class Tenant {
+public class TenantModel {
 
     private int Id;
     private int Id_pessoa;
 
-    public Tenant() {
+    public TenantModel() {
+    }
+
+    public TenantModel(int id, int id_pessoa) {
+        Id = id;
+        Id_pessoa = id_pessoa;
     }
 
     public int getId() {
@@ -24,8 +29,5 @@ public class Tenant {
         Id_pessoa = id_pessoa;
     }
 
-    public Tenant(int id, int id_pessoa) {
-        Id = id;
-        Id_pessoa = id_pessoa;
-    }
+
 }
