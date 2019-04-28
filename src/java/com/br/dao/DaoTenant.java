@@ -1,6 +1,6 @@
 package java.com.br.dao;
 
-import java.com.br.Factory.ConnectionFactory;
+import java.com.br.factory.ConnectionFactory;
 import java.com.br.model.PessoaModel;
 import java.com.br.model.TenantModel;
 import java.sql.PreparedStatement;
@@ -29,6 +29,8 @@ public class DaoTenant implements Dao{
         try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, oPessoa.getId());
+            stmt.execute();
+            return true;
 
         } catch (SQLException ex) {
             Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
