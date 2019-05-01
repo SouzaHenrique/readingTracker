@@ -36,7 +36,7 @@ public class Daoleitura implements Dao {
             return true;
 
         } catch (SQLException ex) {
-            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Daoleitura.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return false;
@@ -64,7 +64,7 @@ public class Daoleitura implements Dao {
             return true;
 
         }catch (SQLException ex) {
-            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Daoleitura.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -98,7 +98,7 @@ public class Daoleitura implements Dao {
                 return oLeitura;
             }
         }catch(SQLException ex){
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+            Logger.getLogger(Daoleitura.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
         }
 
         return null;
@@ -126,7 +126,7 @@ public class Daoleitura implements Dao {
 
                 return lstLeitura;
             }catch(SQLException ex){
-                Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+                Logger.getLogger(Daoleitura.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
             }
 
             return null;

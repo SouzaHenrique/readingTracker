@@ -33,7 +33,7 @@ public class DaoTenant implements Dao{
             return true;
 
         } catch (SQLException ex) {
-            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DaoTenant.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return false;
