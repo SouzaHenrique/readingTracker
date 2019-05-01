@@ -22,13 +22,13 @@ public class DaoTenant implements Dao{
         }
 
         TenantModel oTenant = new TenantModel();
-        oTenant.setId_pessoa(oTenant.getId_pessoa());
+        oTenant.setId_pessoa(oPessoa.getId());
 
         String comando = "insert into Tenant(id_pessoa) values (?)";
 
         try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setInt(1, oPessoa.getId());
+            stmt.setInt(1, oTenant.getId_pessoa());
             stmt.execute();
             return true;
 

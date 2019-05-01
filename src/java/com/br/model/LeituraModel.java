@@ -2,12 +2,12 @@ package java.com.br.model;
 
 public class LeituraModel {
 
-    int Id;
-    int Id_Leitor;
-    int Id_Livro;
-    int StatusLeitura;
-    int PaginasLidas;
-    String DataterminoPlanejado;
+    private int Id;
+    private int Id_Leitor;
+    private int Id_Livro;
+    private int StatusLeitura;
+    private int PaginasLidas;
+    private String DataterminoPlanejado;
 
     public LeituraModel(int id, int id_Leitor, int id_Livro, int statusLeitura, int paginasLidas, String dataterminoPlanejado) {
         Id = id;

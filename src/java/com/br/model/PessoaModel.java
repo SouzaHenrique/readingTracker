@@ -10,16 +10,16 @@ public class PessoaModel {
     private String DataNascimento;
     private String Email;
     private String Senha;
-    private int statusPessoa;
+    private Boolean isAtivo;
 
-    public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, int statusPessoa) {
+    public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, Boolean isAtivo) {
         Id = id;
         Nome = nome;
         Sobrenome = sobrenome;
         DataNascimento = dataNascimento;
         Email = email;
         Senha = senha;
-        this.statusPessoa = statusPessoa;
+        this.isAtivo = isAtivo;
     }
 
     public int getId() {
@@ -70,14 +70,9 @@ public class PessoaModel {
         Senha = senha;
     }
 
-    public int getStatusPessoa() {
-        return statusPessoa;
-    }
+    public Boolean getStatusPessoa() { return isAtivo;    }
 
-    public void setStatusPessoa(int statusPessoa) {
-        this.statusPessoa = statusPessoa;
-    }
-
+    public void setStatusPessoa(Boolean statusPessoa) { this.isAtivo = isAtivo; }
 }
 
 

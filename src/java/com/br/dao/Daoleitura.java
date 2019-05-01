@@ -52,16 +52,17 @@ public class Daoleitura implements Dao {
             return false;
         }
 
-        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitor = ? ";
+        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ? ";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, oLeitura.getStatusLeitura());
             stmt.setInt(2, oLeitura.getPaginasLidas());
             stmt.setString(3, oLeitura.getDataterminoPlanejado());
-            stmt.setInt(4, oLeitura.getId_Leitor());
+            stmt.setInt(4, oLeitura.getId());
             stmt.execute();
             return true;
+
         }catch (SQLException ex) {
             Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,7 +70,7 @@ public class Daoleitura implements Dao {
     }
 
     @Override
-    public boolean Delete(int id) {
+    public boolean Delete(int id){
         return false;
     }
 
