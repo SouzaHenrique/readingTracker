@@ -1,4 +1,4 @@
-package java.com.br.model;
+package ReadingTracker.com.br.model;
 
 public class LeituraModel {
 

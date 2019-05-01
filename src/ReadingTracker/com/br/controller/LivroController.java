@@ -1,4 +1,4 @@
-package java.com.br.controller;
+package ReadingTracker.com.br.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
