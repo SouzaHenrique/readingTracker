@@ -1,6 +1,6 @@
 
 
- package java.com.br.factory;
+ package readingTracker.com.br.factory;
 
  // import java.net.URL;
  import java.sql.Connection;
@@ -21,7 +21,7 @@ public class ConnectionFactory {
         Connection con;
 
         try {
-            Class.forName("org.gjt.mm.mysql.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, USER, PASSWORD);
             return con;
         } catch (ClassNotFoundException ex) {

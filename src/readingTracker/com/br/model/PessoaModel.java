@@ -1,4 +1,4 @@
-package java.com.br.model;
+package readingTracker.com.br.model;
 
 import java.util.Date;
 

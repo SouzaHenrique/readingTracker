@@ -1,4 +1,4 @@
-package java.com.br.model;
+package readingTracker.com.br.model;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ public class LivroModel {
     private int Id;
     private String Titulo;
     private String Autor;
-    private Date AnoPublicacao;
+    private String AnoPublicacao;
     private String Editora;
     private int QuantidadePaginas;
     private long QuantidadeLeituras;
@@ -15,19 +15,17 @@ public class LivroModel {
     public LivroModel() {
     }
 
-    public LivroModel(int id, String titulo, String autor, Date anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeituras) {
-        Id = id;
-        Titulo = titulo;
-        Autor = autor;
-        AnoPublicacao = anoPublicacao;
-        Editora = editora;
-        QuantidadePaginas = quantidadePaginas;
-        QuantidadeLeituras = quantidadeLeituras;
+    public LivroModel(int id, String titulo, String autor, String anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeituras) {
+        this.setId(id);
+        this.setTitulo(titulo);
+        this.setAutor(autor);
+        this.setAnoPublicacao(anoPublicacao);
+        this.setEditora(editora);
+        this.setQuantidadePaginas(quantidadePaginas);
+        this.setQuantidadeLeituras(quantidadeLeituras);
     }
 
-    public int getId() {
-        return Id;
-    }
+    public int getId() { return Id; }
 
     public void setId(int id) {
         Id = id;
@@ -45,15 +43,11 @@ public class LivroModel {
         return Autor;
     }
 
-    public void setAutor(String autor) {
-        Autor = autor;
-    }
+    public void setAutor(String autor) { Autor = autor;    }
 
-    public Date getAnoPublicacao() {
-        return AnoPublicacao;
-    }
+    public String getAnoPublicacao() { return AnoPublicacao; }
 
-    public void setAnoPublicacao(Date anoPublicacao) {
+    public void setAnoPublicacao(String anoPublicacao) {
         AnoPublicacao = anoPublicacao;
     }
 
@@ -65,9 +59,7 @@ public class LivroModel {
         Editora = editora;
     }
 
-    public int getQuantidadePaginas() {
-        return QuantidadePaginas;
-    }
+    public int getQuantidadePaginas() { return QuantidadePaginas; }
 
     public void setQuantidadePaginas(int quantidadePaginas) {
         QuantidadePaginas = quantidadePaginas;
