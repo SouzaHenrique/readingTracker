@@ -7,20 +7,20 @@ public class PessoaModel {
     private int Id;
     private String Nome;
     private String Sobrenome;
-    private Date DataNascimento;
+    private String DataNascimento;
     private String Email;
     private String Senha;
+    private String ApiId;
+    private Boolean isAtivo;
 
-    public PessoaModel() {
-    }
-
-    public PessoaModel(int id, String nome, String sobrenome, Date dataNascimento, String email, String senha) {
-        Id = id;
-        Nome = nome;
-        Sobrenome = sobrenome;
-        DataNascimento = dataNascimento;
-        Email = email;
-        Senha = senha;
+    public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, String apiId ,Boolean isAtivo) {
+        this.setNome(nome);
+        this.setSobrenome(sobrenome);
+        this.setDataNascimento(dataNascimento);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setApiId(apiId);
+        this.setAtivo(isAtivo);
     }
 
     public int getId() {
@@ -47,11 +47,11 @@ public class PessoaModel {
         Sobrenome = sobrenome;
     }
 
-    public Date getDataNascimento() {
+    public String getDataNascimento() {
         return DataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(String dataNascimento) {
         DataNascimento = dataNascimento;
     }
 
@@ -71,7 +71,15 @@ public class PessoaModel {
         Senha = senha;
     }
 
+    public Boolean getStatusPessoa() { return isAtivo;    }
 
+    public void setStatusPessoa(Boolean statusPessoa) { this.isAtivo = isAtivo; }
 
+    public String getApiId() { return ApiId; }
 
+    public void setApiId(String apiId) {ApiId = apiId; }
+
+    public Boolean getAtivo() {return isAtivo; }
+
+    public void setAtivo(Boolean ativo) { isAtivo = ativo; }
 }
