@@ -23,6 +23,11 @@
         <servlet-class>readingTracker.com.br.controller.TenantController</servlet-class>
     </servlet>
     
+    <servlet>
+        <servlet-name>Leitura</servlet-name>
+        <servlet-class>readingTracker.com.br.controller.LeituraController</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>Livro</servlet-name>
         <url-pattern>/livro</url-pattern>
@@ -36,6 +41,11 @@
     <servlet-mapping>
         <servlet-name>Tenant</servlet-name>
         <url-pattern>/tenant</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>Leitura</servlet-name>
+        <url-pattern>/leitura</url-pattern>
     </servlet-mapping>
 
 
