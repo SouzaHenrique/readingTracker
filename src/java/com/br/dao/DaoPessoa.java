@@ -1,7 +1,10 @@
 package java.com.br.dao;
 
+import java.com.br.dao.Dao;
+import java.com.br.dao.DaoTenant;
 import java.com.br.factory.ConnectionFactory;
 import java.com.br.model.PessoaModel;
+import java.com.br.model.TenantModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +17,7 @@ import java.util.logging.Logger;
 public class DaoPessoa implements Dao {
 
     @Override
-    public boolean Save(Object object) {
+    public boolean Save(Object object){
 
         PessoaModel pessoa = null;
         if (object instanceof PessoaModel) {
@@ -23,7 +26,7 @@ public class DaoPessoa implements Dao {
             return false;
         }
 
-        String comando = "insert into pessoa(nome,sobrenome,dataNascimento,email,senha,statusPessoa) values (?,?,?,?,?,?)";
+        String comando = "insert into pessoa(nome,sobrenome,dataNascimento,email,senha,statusPessoa,apiId) values (?,?,?,?,?,?,?)";
 
         try (Connection con = new ConnectionFactory().getConnection()) {
             try {
@@ -37,6 +40,7 @@ public class DaoPessoa implements Dao {
                 stmt.setString(4, pessoa.getEmail());
                 stmt.setString(5, pessoa.getSenha());
                 stmt.setInt(6, pessoa.getStatusPessoa());
+                stmt.setString(7, pessoa.getApiId());
                 stmt.execute();
                 stmt.close();
                 /*----------------------------------*/
@@ -44,15 +48,17 @@ public class DaoPessoa implements Dao {
                 comando = "select max(id) from pessoa";
                 stmt = con.prepareStatement(comando);
                 ResultSet rs = stmt.executeQuery();
-                rs.next();
-                pessoa.setId(rs.getInt("id"));
-
-                new DaoTenant().Save(pessoa);
+                if(rs.next()){
+                    pessoa.setId(rs.getInt("id"));
+                    new DaoTenant().Save(pessoa);
+                    con.commit();
+                } else {
+                    con.rollback();
+                    return false;
+                }
 
                 rs.close();
                 stmt.close();
-
-                con.commit();
 
                 return true;
             } catch (SQLException ex) {
@@ -75,7 +81,7 @@ public class DaoPessoa implements Dao {
         } else {
             return false;
         }
-        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?,statusPessoa = ? where id = ?";
+        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?,statusPessoa = ?, apiId = ? where id = ?";
 
         try {
             Connection con = new ConnectionFactory().getConnection();
@@ -86,7 +92,8 @@ public class DaoPessoa implements Dao {
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
             stmt.setInt(6, pessoa.getStatusPessoa());
-            stmt.setInt(7, pessoa.getId());
+            stmt.setString(7, pessoa.getApiId());
+            stmt.setInt(8,pessoa.getId());
             stmt.execute();
             stmt.close();
 
@@ -132,7 +139,8 @@ public class DaoPessoa implements Dao {
                         rs.getString("dataNascimento"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getInt("statusPessoa")
+                        rs.getInt("statusPessoa"),
+                        rs.getString("apiId")
                 );
                 return pessoa;
             }
@@ -159,7 +167,8 @@ public class DaoPessoa implements Dao {
                         rs.getString("dataNascimento"),
                         rs.getString("email"),
                         rs.getString("senha"),
-                        rs.getInt("statusPessoa")
+                        rs.getInt("statusPessoa"),
+                        rs.getString("apiId")
                 );
                 lstPessoa.add(pessoa);
             }

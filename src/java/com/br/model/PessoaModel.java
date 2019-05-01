@@ -2,76 +2,97 @@ package java.com.br.model;
 
 import java.util.Date;
 
+
 public class PessoaModel {
 
-    private int Id;
-    private String Nome;
-    private String Sobrenome;
-    private Date DataNascimento;
-    private String Email;
-    private String Senha;
+    private int id;
+    private String nome;
+    private String sobrenome;
+    private String dataNascimento;
+    private String email;
+    private String senha;
+    private int statusPessoa;
+    private String apiId;
 
-    public PessoaModel() {
+    public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, int statusPessoa, String apiId) {
+        this.setId(id);
+        this.setNome(nome);
+        this.setSobrenome(sobrenome);
+        this.setDataNascimento(dataNascimento);
+        this.setEmail(email);
+        this.setSenha(senha);
+        this.setStatusPessoa(statusPessoa);
+        this.setApiId(apiId);
     }
 
-    public PessoaModel(int id, String nome, String sobrenome, Date dataNascimento, String email, String senha) {
-        Id = id;
-        Nome = nome;
-        Sobrenome = sobrenome;
-        DataNascimento = dataNascimento;
-        Email = email;
-        Senha = senha;
-    }
+
+
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getNome() {
-        return Nome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        Nome = nome;
+        this.nome = nome;
     }
 
     public String getSobrenome() {
-        return Sobrenome;
+        return sobrenome;
     }
 
     public void setSobrenome(String sobrenome) {
-        Sobrenome = sobrenome;
+        this.sobrenome = sobrenome;
     }
 
-    public Date getDataNascimento() {
-        return DataNascimento;
+    public String getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
-        DataNascimento = dataNascimento;
+    public void setDataNascimento(String dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getSenha() {
-        return Senha;
+        return senha;
     }
 
     public void setSenha(String senha) {
-        Senha = senha;
+        this.senha = senha;
     }
 
+    public int getStatusPessoa() {
+        return statusPessoa;
+    }
 
+    public void setStatusPessoa(int statusPessoa) {
+        this.statusPessoa = statusPessoa;
+    }
 
+    public String getApiId() {
+        return apiId;
+    }
 
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
+    }
 }
+
+
+
+
