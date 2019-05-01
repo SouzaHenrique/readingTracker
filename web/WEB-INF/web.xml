@@ -10,17 +10,17 @@
     
     <servlet>
         <servlet-name>Livro</servlet-name>
-        <servlet-class>java.com.br.controller.LivroController</servlet-class>
+        <servlet-class>readingTracker.com.br.controller.LivroController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>Pessoa</servlet-name>
-        <servlet-class>java.com.br.controller.PessoaController</servlet-class>
+        <servlet-class>readingTracker.com.br.controller.PessoaController</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>Tenant</servlet-name>
-        <servlet-class>java.com.br.controller.TenantController</servlet-class>
+        <servlet-class>readingTracker.com.br.controller.TenantController</servlet-class>
     </servlet>
     
     <servlet-mapping>

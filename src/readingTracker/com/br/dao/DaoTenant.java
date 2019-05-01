@@ -1,8 +1,8 @@
-package java.com.br.dao;
+package readingTracker.com.br.dao;
 
 import java.util.List;
 
-public class DaoPessoa implements Dao {
+public class DaoTenant implements Dao{
     @Override
     public boolean Save(Object object) {
         return false;

@@ -1,4 +1,4 @@
-package java.com.br.dao;
+package readingTracker.com.br.dao;
 
 import java.util.List;
 
