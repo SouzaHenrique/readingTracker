@@ -3,16 +3,54 @@ package readingTracker.com.br.BLL;
 import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.dao.DaoLeitura;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LeituraBLL {
 
-    // TODO - Davi : Método para verificar se a leitura contém os valores necessários para ser persistida
-        /* Este método basicamente valida com IF's se existem os campos na model que está vindo
-            e que são obrigatórios na tabela (ver tabela) e também ele reune a chamada dos métodos
-            que acessam a BLL
-        */
+    private DaoLeitura daoLeitura = new DaoLeitura();
 
-    // TODO - Davi : Método para encapsular a chamada da DAOLeitura
-        /* Este método recebe uma model e aciona a DaoLeitura retornando um bool se
-           a persistência dos dados na tabela foi bem sucedida.
-        */
+   /* Este método basicamente valida com IF's se existem os campos na model que está vindo
+      e que são obrigatórios na tabela (ver tabela) e também ele reune a chamada dos métodos
+      que acessam a BLL
+    */
+    public boolean verificaCampos (LeituraModel oLeitura) {
+            if (oLeitura.getId_Livro() != 0 || oLeitura.getId_Leitor() != 0 || oLeitura.getStatusLeitura() != 0) {
+                return true;
+            }
+            return false;
+    }
+
+    public boolean novaLeitura(LeituraModel oLeitura){
+
+        if (daoLeitura.Save(oLeitura)){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean editarLeitura(LeituraModel oLeitura){
+
+        if(daoLeitura.Update(oLeitura)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public List<Object> listarLeituras(int id){
+        List<Object> lstLeitura = new ArrayList<>();
+
+        lstLeitura = daoLeitura.getListById(id);
+
+        if(lstLeitura.equals(null)){
+            return null;
+        }
+
+        return lstLeitura;
+
+    }
+
 }

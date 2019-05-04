@@ -52,14 +52,15 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ? ";
+        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitor = ? and id_livro = ? ";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, oLeitura.getStatusLeitura());
             stmt.setInt(2, oLeitura.getPaginasLidas());
             stmt.setString(3, oLeitura.getDataterminoPlanejado());
-            stmt.setInt(4, oLeitura.getId());
+            stmt.setInt(4, oLeitura.getId_Leitor());
+            stmt.setInt(5, oLeitura.getId_Livro());
             stmt.execute();
             return true;
 
@@ -145,4 +146,33 @@ public class DaoLeitura implements Dao {
         return null;
     }
 
+    public List<Object> getListById(int id){
+        List<Object> lstLeitura = new ArrayList<>();
+        String comando = "select * from Leitura where id_leitor = ?";
+
+        try{
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                LeituraModel oLeitura = new LeituraModel(
+                        rs.getInt("id"),
+                        rs.getInt("id_Leitor"),
+                        rs.getInt("id_Livro"),
+                        rs.getInt("statusLeitura"),
+                        rs.getInt("paginasLidas"),
+                        rs.getString("dataterminoPlanejado")
+                );
+                lstLeitura.add(oLeitura);
+            }
+
+            return lstLeitura;
+        }catch(SQLException ex){
+            Logger.getLogger(DaoLeitura.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+        }
+
+        return null;
+    }
+
 }
+
