@@ -5,6 +5,8 @@ import readingTracker.com.br.dao.DaoLeitura;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LeituraBLL {
 
@@ -15,16 +17,22 @@ public class LeituraBLL {
       que acessam a BLL
     */
     public boolean verificaCampos (LeituraModel oLeitura) {
-            if (oLeitura.getId_Livro() != 0 || oLeitura.getId_Leitor() != 0 || oLeitura.getStatusLeitura() != 0) {
+            if(oLeitura.getId_Livro() != 0 && oLeitura.getId_Leitor() != 0 && oLeitura.getStatusLeitura() != 0) {
                 return true;
             }
+
             return false;
     }
 
     public boolean novaLeitura(LeituraModel oLeitura){
 
-        if (daoLeitura.Save(oLeitura)){
-            return true;
+
+        try {
+            if (daoLeitura.Save(oLeitura)){
+                return true;
+            }
+        }catch (Exception ex){
+            Logger.getLogger(LeituraBLL.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return false;

@@ -22,7 +22,7 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "insert into Leitura(id_Leitor, id_Livro, statusLeitura, paginasLidas, dataterminoPlanejado) values (?,?,?,?,?)";
+        String comando = "insert into leitura(id_Leitor, id_Livro, statusLeitura, paginasLidas, dataterminoPlanejado) values (?,?,?,?,?)";
 
 
         try {
