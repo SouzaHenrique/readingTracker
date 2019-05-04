@@ -35,7 +35,7 @@ public class DaoPessoa implements Dao {
                 stmt.setString(3, pessoa.getDataNascimento());
                 stmt.setString(4, pessoa.getEmail());
                 stmt.setString(5, pessoa.getSenha());
-                stmt.setBoolean(6, pessoa.getStatusPessoa());
+                stmt.setBoolean(6, pessoa.getAtivo());
                 stmt.setString(7, pessoa.getApiId());
                 stmt.execute();
                 stmt.close();
@@ -77,7 +77,7 @@ public class DaoPessoa implements Dao {
         } else {
             return false;
         }
-        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?,statusPessoa = ?, apiId = ? where id = ?";
+        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?,statusPessoa = ? where id = ?";
 
         try {
             Connection con = new ConnectionFactory().getConnection();
@@ -87,9 +87,8 @@ public class DaoPessoa implements Dao {
             stmt.setString(3, pessoa.getDataNascimento());
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
-            stmt.setBoolean(6, pessoa.getStatusPessoa());
-            stmt.setString(7, pessoa.getApiId());
-            stmt.setInt(8,pessoa.getId());
+            stmt.setBoolean(6, pessoa.getAtivo());
+            stmt.setInt(7,pessoa.getId());
             stmt.execute();
             stmt.close();
 
@@ -171,9 +170,31 @@ public class DaoPessoa implements Dao {
 
             return lstPessoa;
         }catch(SQLException ex){
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
         }
 
         return null;
+    }
+
+    public int get(String apiId){
+        int valor = 0;
+        String comando = "select id from pessoa where apiId = ?";
+
+        try{
+            PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                valor = rs.getInt("id");
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e){
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
+            return 0;
+        }
+
+        return valor;
     }
 }
