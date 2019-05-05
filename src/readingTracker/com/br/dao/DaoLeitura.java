@@ -52,15 +52,14 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitor = ? and id_livro = ? ";
+        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, oLeitura.getStatusLeitura());
             stmt.setInt(2, oLeitura.getPaginasLidas());
             stmt.setString(3, oLeitura.getDataterminoPlanejado());
-            stmt.setInt(4, oLeitura.getId_Leitor());
-            stmt.setInt(5, oLeitura.getId_Livro());
+            stmt.setInt(4, oLeitura.getId());
             stmt.execute();
             return true;
 
@@ -73,7 +72,7 @@ public class DaoLeitura implements Dao {
     @Override
     public boolean Delete(int id){
 
-        String comando = "DELETR FROM leitura where id = ?";
+        String comando = "DELETE FROM leitura where id = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
