@@ -194,6 +194,38 @@ public class DaoPessoa implements Dao {
         return null;
     }
 
+    public List<Object> get(boolean status) {
+        List<Object> lstPessoa = new ArrayList<>();
+        String comando = "select * from pessoa WHERE statusPessoa = ?";
+
+        int valor = status ? 1 : 0;
+
+        try{
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setInt(1, valor);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                PessoaModel pessoa = new PessoaModel(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
+                        rs.getString("dataNascimento"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("apiId"),
+                        rs.getBoolean("statusPessoa")
+                );
+                lstPessoa.add(pessoa);
+            }
+
+            return lstPessoa;
+        }catch(SQLException ex){
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
+        }
+
+        return null;
+    }
+
     public int get(String apiId){
         int valor = 0;
         String comando = "select id from pessoa where apiId = ?";
