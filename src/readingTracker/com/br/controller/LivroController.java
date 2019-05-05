@@ -33,7 +33,7 @@ public class LivroController extends HttpServlet {
         //if(op.equals(opcaoLivro.Select)) {
 
             try {
-                if (oBLL.verificaCampos()) {
+                if (oBLL.verificaCampos(Titulo)) {
                     lstLivros = oBLL.buscaLivros;
                     //verificar conforme formato da tela
                     // request.setAttributes("");

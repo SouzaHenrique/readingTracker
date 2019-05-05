@@ -176,6 +176,7 @@ public class DaoLivro implements Dao {
                             rs.getInt("quantidadePaginas"),
                             rs.getLong("quantidadeLeituras"));
                     lstLivro.add(livro);
+
                 }
 
                 return lstLivro;
