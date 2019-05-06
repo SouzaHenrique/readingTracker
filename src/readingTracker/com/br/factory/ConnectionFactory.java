@@ -10,24 +10,21 @@
 
 public class ConnectionFactory {
 
-    public final String SERVER = "";
-    public final String PORT = "";
-    public final String USER = "";
+    public final String SERVER = "localhost";
+    public final String PORT = "3306";
+    public final String USER = "root";
     public final String PASSWORD = "";
-    public final String DATABASE = "";
+    public final String DATABASE = "readingtracker";
 
     public Connection getConnection() {
-        String url = "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DATABASE;
+        String url = "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DATABASE + "?useTimezone=true&serverTimezone=UTC";
         Connection con;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, USER, PASSWORD);
             return con;
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Driver não encontrado" + ex.getMessage());
         } catch (SQLException ex) {
-            System.out.println("Não conecta com o Servidor" + ex.getMessage());
+            System.out.println("Não conecta com o Servidor, motivo: " + ex.getMessage());
         } catch (Exception ex) {
             System.out.println("Outro erro: " + ex.getMessage());
 
