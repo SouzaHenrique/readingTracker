@@ -71,15 +71,11 @@ public class PessoaModel {
         Senha = senha;
     }
 
-    public Boolean getStatusPessoa() { return isAtivo;    }
-
-    public void setStatusPessoa(Boolean statusPessoa) { this.isAtivo = isAtivo; }
-
     public String getApiId() { return ApiId; }
 
     public void setApiId(String apiId) {ApiId = apiId; }
 
-    public Boolean getAtivo() {return isAtivo; }
+    public boolean getAtivo() {return isAtivo; }
 
     public void setAtivo(Boolean ativo) { isAtivo = ativo; }
 }

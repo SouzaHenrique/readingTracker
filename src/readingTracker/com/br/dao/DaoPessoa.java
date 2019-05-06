@@ -35,7 +35,7 @@ public class DaoPessoa implements Dao {
                 stmt.setString(3, pessoa.getDataNascimento());
                 stmt.setString(4, pessoa.getEmail());
                 stmt.setString(5, pessoa.getSenha());
-                stmt.setBoolean(6, pessoa.getStatusPessoa());
+                stmt.setBoolean(6, pessoa.getAtivo());
                 stmt.setString(7, pessoa.getApiId());
                 stmt.execute();
                 stmt.close();
@@ -77,7 +77,7 @@ public class DaoPessoa implements Dao {
         } else {
             return false;
         }
-        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?,statusPessoa = ?, apiId = ? where id = ?";
+        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ? where id = ?";
 
         try {
             Connection con = new ConnectionFactory().getConnection();
@@ -87,12 +87,29 @@ public class DaoPessoa implements Dao {
             stmt.setString(3, pessoa.getDataNascimento());
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
-            stmt.setBoolean(6, pessoa.getStatusPessoa());
-            stmt.setString(7, pessoa.getApiId());
-            stmt.setInt(8,pessoa.getId());
+            stmt.setInt(6,pessoa.getId());
             stmt.execute();
             stmt.close();
 
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao alterar os dados");
+
+        }
+        return false;
+    }
+
+    //precisa de um update para alterar apenas o status do usuário
+    public boolean Update(boolean status) {
+
+        String comando = "update pessoa set statusPessoa = ? where id = ?";
+
+        try {
+            Connection con = new ConnectionFactory().getConnection();
+            PreparedStatement stmt = con.prepareStatement(comando);
+            stmt.setBoolean(1, status);
+            stmt.execute();
+            stmt.close();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao alterar os dados");
@@ -171,9 +188,63 @@ public class DaoPessoa implements Dao {
 
             return lstPessoa;
         }catch(SQLException ex){
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
         }
 
         return null;
+    }
+
+    public List<Object> get(boolean status) {
+        List<Object> lstPessoa = new ArrayList<>();
+        String comando = "select * from pessoa WHERE statusPessoa = ?";
+
+        int valor = status ? 1 : 0;
+
+        try{
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setInt(1, valor);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                PessoaModel pessoa = new PessoaModel(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
+                        rs.getString("dataNascimento"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("apiId"),
+                        rs.getBoolean("statusPessoa")
+                );
+                lstPessoa.add(pessoa);
+            }
+
+            return lstPessoa;
+        }catch(SQLException ex){
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
+        }
+
+        return null;
+    }
+
+    public int get(String apiId){
+        int valor = 0;
+        String comando = "select id from pessoa where apiId = ?";
+
+        try{
+            PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                valor = rs.getInt("id");
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e){
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
+            return 0;
+        }
+
+        return valor;
     }
 }
