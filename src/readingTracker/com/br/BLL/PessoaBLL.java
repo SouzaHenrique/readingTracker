@@ -158,37 +158,14 @@ public class PessoaBLL {
          return false;
      }
 
-     public boolean update (Object object) {
-         PessoaModel pessoa = null;
-         if (object instanceof PessoaModel) {
-             pessoa = (PessoaModel) object;
-         } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
-             return false;
-         }
-
-         if(isObjetoValido(pessoa)){
-             if(new DaoPessoa().Update(pessoa)){
-                 return true;
-             } else {
-                 setErro(MensagemErro.DAO, "alterar");
-             }
-         } else {
-             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-         }
+     public boolean update (Object object){
          return false;
      }
+    //TODO - Walter : método que chama a DAOPessoa para persistir um objeto de pessoa e retornar um bool
+        /*  Este método apenas encapsula o método da DAOPessoa para persistir o objeto e deve
+            ser chamado pelo método acima.
+        */
 
-    public boolean update (boolean status) {
-
-        if(new DaoPessoa().Update(status)){
-            return true;
-        } else {
-            setErro(MensagemErro.DAO, "alterar");
-        }
-        return false;
-    }
-    
     //TODO - Walter : método para validar usuário usando email e senha e retornar API_ID
         /*  Este método ira precisar receber como parametro email e senha, chamar o método
             associado na DAOPessoa (precisa criar sobrecarga de método de busca, mas baseado
