@@ -1,6 +1,5 @@
 package readingTracker.com.br.BLL;
 
-import org.jetbrains.annotations.Contract;
 import readingTracker.com.br.model.PessoaModel;
 import readingTracker.com.br.dao.DaoPessoa;
 
@@ -18,70 +17,52 @@ public class PessoaBLL {
             ele condiz com os campos not null da tabela pessoa retornando uma string com
             informando que tal campo é requerido.
         */
-
-    public String log; /*essa variável será a responsável por mostrar para os outros métodos, qual é o problema
+     public int log; /*essa variável será a responsável por mostrar para os outros métodos, qual é o problema
                        que está ocorrendo na validação*/
 
-    public enum MensagemErro {
+     public String msgErro(int i){
+         String mensagem = "";
 
-        NULL("null"),
-        INVALIDO("invalido"),
-        OBJECT("object"),
-        DAO("dao");
+         switch(i){
+             case 1 :{
+                 mensagem = "O preenchimento do campo 'nome' é obrigatório!";
+                 break;
+             }
 
-        private String descricao;
+             case 2: {
+                 mensagem = "O preenchimento do campo 'senha' é obrigratório!";
+             }
 
+             case 3: {
+                 mensagem = "DataNascimento inválida!";
+             }
 
-        MensagemErro(String descricao) {
-            this.descricao = descricao;
-        }
+             case 4: {
+                 mensagem = "Email inválido!";
+             }
 
-        public String getDescricao() {
-            return descricao;
-        }
-    }
+             case 5: {
+                 mensagem = "O preenchimento do campo 'emaill' é obrigatorio";
+             }
 
-    MensagemErro erro;
+             case 6: {
+                 mensagem = "Objeto não corresponde a uma instância de DaoPessoa";
+             }
+             case 7: {
+                 mensagem = "Não foi possível adicionar o registro do usuário!";
+             }
+             default:{
 
-    public void setErro(MensagemErro MsgErro, String log){
-        erro = MsgErro;
-        this.log = log;
-    }
-
-    public String getErro(){
-        String mensagem = "";
-        switch(erro){
-
-            case NULL: {
-                mensagem = "O preenchimento do campo '" + this.log + "' é obrigatório!";
-            }
-
-            case INVALIDO: {
-                mensagem = this.log + "é inválido!";
-            }
-
-            case DAO: {
-                mensagem = "Não foi possível " + this.log + " o registro do usuário";
-            }
-
-            case OBJECT: {
-                mensagem = "Objeto não correnponde a uma instância de " + this.log;
-
-            }
-            default:{
-                mensagem = "sem erros aparentes!";
-            }
-        }
-
-        return mensagem;
-    }
-
+             }
+         }
+         return mensagem;
+     }
      public boolean isObjetoValido(Object object){
          PessoaModel pessoa = null;
          if (object instanceof PessoaModel) {
              pessoa = (PessoaModel) object;
          } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
+             this.log = 6;
              return false;
          }
          /*
@@ -91,12 +72,12 @@ public class PessoaBLL {
          //começar validando campos que não podem ser nuláveis
 
          if(pessoa.getNome() == null){
-             setErro(MensagemErro.NULL, "nome");
+             this.log = 1;
              return false;
          }
 
          if(pessoa.getSenha() == null){
-             setErro(MensagemErro.NULL, "senha");
+             this.log = 2;
              return false;
          }
 
@@ -111,7 +92,7 @@ public class PessoaBLL {
          } catch (ParseException ex) {
              // data inválida! Não parseou.
              // então, não válido!
-             setErro(MensagemErro.INVALIDO, "DataNascimento");
+             this.log = 3;
              return false;
          }
 
@@ -121,11 +102,11 @@ public class PessoaBLL {
              int ponto = pessoa.getEmail().indexOf('.');
 
              if (!(arroba > 0 && ponto > arroba)) {
-                 setErro(MensagemErro.INVALIDO, "email");
+                 this.log = 4;
                  return false;
              }
          } else {
-             setErro(MensagemErro.NULL, "email");
+             this.log = 5;
              return false;
          }
 
@@ -138,7 +119,7 @@ public class PessoaBLL {
          if (object instanceof PessoaModel) {
              pessoa = (PessoaModel) object;
          } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
+             this.log = 6;
              return false;
          }
 
@@ -149,10 +130,10 @@ public class PessoaBLL {
              if(new DaoPessoa().Save(pessoa)){
                  return true;
              } else {
-                 setErro(MensagemErro.DAO, "inserir");
+                 this.log = 7;
              }
          } else {
-             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
+             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE,  msgErro(this.log));
          }
 
          return false;
