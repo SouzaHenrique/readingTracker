@@ -26,7 +26,6 @@ public class LeituraBLL {
 
     public boolean novaLeitura(LeituraModel oLeitura){
 
-
         try {
             if (daoLeitura.Save(oLeitura)){
                 return true;

@@ -28,61 +28,50 @@ public class LeituraController extends HttpServlet{
         String op = request.getParameter("opcao");
 
 
-        oLeitura.setId_Leitor(parseInt(request.getParameter("id_leitor")));
-        oLeitura.setId_Livro(parseInt(request.getParameter("id_livro")));
-        oLeitura.setDataterminoPlanejado(request.getParameter("dataTerminoPlanejado"));
-        oLeitura.setPaginasLidas(parseInt(request.getParameter("paginasLidas")));
-        oLeitura.setStatusLeitura(parseInt(request.getParameter("statusLeitura")));
-
 
         if(op.equals(opcaoLeitura.CRIAR)) {
             //Opção 1 - criar nova leitura
             try {
                 if (oBll.verificaCampos(oLeitura)) {
                     if (oBll.novaLeitura(oLeitura)) {
-                        //request.setAttribute("mensagem", "Leitura cadastrada com sucesso!");
-                        response.getWriter().println("<html>");
-                        response.getWriter().println("<head>");
-                        response.getWriter().println("<title> teste retorno ok </title>");
-                        response.getWriter().println("</head>");
-                        response.getWriter().println("<body>");
-                        response.getWriter().println("cadastro sucesso");
-                        response.getWriter().println("</body>");
-                        response.getWriter().println("</html>");
-
+                       //devolver mensagem / dados
 
                     } else {
-                        request.setAttribute("mensagem", "Não foi possivel cadastrar esta leitura!");
+                        //devolver mensagem / dados
                     }
                 }
             } catch (Exception ex) {
                 Logger.getLogger(LeituraController.class.getName()).log(Level.SEVERE, null, ex);
-                request.setAttribute("mensagem", "Campos invalidos ou incompletos" + ex);
+                //devolver mensagem / dados
             }
 
         }
 
-        else if (op.equals(opcaoLeitura.EDITAR)){
+        if (op.equals(opcaoLeitura.EDITAR)){
                 //Opção 2 - editar leitura
             if(oBll.verificaCampos(oLeitura)){
                 if(oBll.editarLeitura(oLeitura)){
-                    request.setAttribute("mensagem", "Leitura atualizada com sucesso!");
+                    //devolver mensagem / dados
                 }else{
-                    request.setAttribute("mensagem", "Não foi possivel atualizar esta leitura!");
+                    //devolver mensagem / dados
                 }
             }else{
-                request.setAttribute("mensagem", "Campos invalidos ou incompletos");
+                //devolver mensagem / dados
 
             }
 
         }
-        else if (op.equals(opcaoLeitura.LISTAR)){
+
+        if (op.equals(opcaoLeitura.LISTAR)){
             //Opção 3 - listar leituras do usuario
             if (oBll.verificaCampos(oLeitura)){
                 List<Object> lstLeitura = new ArrayList<>();
                 lstLeitura = oBll.listarLeituras(oLeitura.getId_Leitor());
+
+                //TODO RETORNO DE LISTA
+
             }else{
-                request.setAttribute("mensagem", "Campos invalidos ou incompletos");
+                //devolver mensagem / dados
             }
 
         }
