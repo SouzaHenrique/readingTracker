@@ -57,7 +57,7 @@ public class DaoLivro implements Dao {
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, oLivro.getAutor());
+            stmt.setString(1, oLivro.getTitulo());
             stmt.setString(2,oLivro.getAutor());
             stmt.setString(3, oLivro.getAnoPublicacao());
             stmt.setString(4, oLivro.getEditora());
@@ -154,4 +154,40 @@ public class DaoLivro implements Dao {
 
         return null;
     }
+
+    public List<Object> Select(String Titulo) {
+
+            List<Object> lstLivro = new ArrayList<>();
+
+            try {
+                String comando = "select * from Livro where titulo = ?";
+
+                PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+                stmt.setString(1, Titulo);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    LivroModel livro = new LivroModel
+                            (rs.getId("id"),
+                            rs.getString("titulo"),
+                            rs.getString("autor"),
+                            rs.getString("anoPublicacao"),
+                            rs.getString("editora"),
+                            rs.getInt("quantidadePaginas"),
+                            rs.getLong("quantidadeLeituras"));
+                    lstLivro.add(livro);
+
+                }
+
+                return lstLivro;
+
+            } catch (SQLException ex) {
+
+                System.out.println("Erro ao listar Livros pelo Titulo" + ex.getMessage());
+
+            }
+
+        return null;
+    }
+
 }
