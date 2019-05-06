@@ -1,6 +1,5 @@
 package readingTracker.com.br.BLL;
 
-import javafx.collections.ArrayChangeListener;
 import org.jetbrains.annotations.Contract;
 import readingTracker.com.br.model.PessoaModel;
 import readingTracker.com.br.dao.DaoPessoa;
@@ -8,7 +7,6 @@ import readingTracker.com.br.dao.DaoPessoa;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,11 +23,22 @@ public class PessoaBLL {
                        que está ocorrendo na validação*/
 
     public enum MensagemErro {
-        NULL,
-        INVALID,
-        OBJECT,
-        DAO,
-        NOTFOUND;
+
+        NULL("null"),
+        INVALIDO("invalido"),
+        OBJECT("object"),
+        DAO("dao");
+
+        private String descricao;
+
+
+        MensagemErro(String descricao) {
+            this.descricao = descricao;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
     }
 
     MensagemErro erro;
@@ -47,7 +56,7 @@ public class PessoaBLL {
                 mensagem = "O preenchimento do campo '" + this.log + "' é obrigatório!";
             }
 
-            case INVALID: {
+            case INVALIDO: {
                 mensagem = this.log + "é inválido!";
             }
 
@@ -58,10 +67,6 @@ public class PessoaBLL {
             case OBJECT: {
                 mensagem = "Objeto não correnponde a uma instância de " + this.log;
 
-            }
-
-            case NOTFOUND: {
-                mensagem = this.log + " não encontrado!";
             }
             default:{
                 mensagem = "sem erros aparentes!";
@@ -106,7 +111,7 @@ public class PessoaBLL {
          } catch (ParseException ex) {
              // data inválida! Não parseou.
              // então, não válido!
-             setErro(MensagemErro.INVALID, "DataNascimento");
+             setErro(MensagemErro.INVALIDO, "DataNascimento");
              return false;
          }
 
@@ -116,7 +121,7 @@ public class PessoaBLL {
              int ponto = pessoa.getEmail().indexOf('.');
 
              if (!(arroba > 0 && ponto > arroba)) {
-                 setErro(MensagemErro.INVALID, "email");
+                 setErro(MensagemErro.INVALIDO, "email");
                  return false;
              }
          } else {
@@ -183,73 +188,7 @@ public class PessoaBLL {
         }
         return false;
     }
-
-    //get por id
-    public Object get(int id){
-        Object obj = new DaoPessoa().get(id);
-        PessoaModel pessoa = null;
-        if (obj instanceof PessoaModel) {
-            pessoa = (PessoaModel) obj;
-        } else {
-            setErro(MensagemErro.OBJECT, "PessoaModel");
-            return null;
-        }
-
-        if(isObjetoValido(obj)){
-            return pessoa;
-        } else {
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-        }
-        return null;
-    }
-    //retorna uma lista com todos os registros
-    public List<PessoaModel> get(){
-        List<Object> lstObj = new DaoPessoa().get();
-        PessoaModel pessoa = null;
-        List<PessoaModel> lstPessoa = null;
-        for(Object obj : lstObj) {
-            if (obj instanceof PessoaModel) {
-                if(isObjetoValido(obj)) {
-                    lstPessoa.add((PessoaModel) obj);
-                } else {
-                    Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-                }
-            } else {
-                setErro(MensagemErro.OBJECT, "PessoaModel");
-                return null;
-            }
-        }
-        return lstPessoa;
-    }
-
-    //retorna uma lista com os usuários ativos ou inativos do sistema (campo statusPessoa)
-    public List<PessoaModel> get(boolean status){
-        List<Object> lstObj = new DaoPessoa().get(status);
-        PessoaModel pessoa = null;
-        List<PessoaModel> lstPessoa = null;
-        for(Object obj : lstObj) {
-            if (obj instanceof PessoaModel) {
-                if(isObjetoValido(obj)) {
-                    lstPessoa.add((PessoaModel) obj);
-                } else {
-                    Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-                }
-            } else {
-                setErro(MensagemErro.OBJECT, "PessoaModel");
-                return null;
-            }
-        }
-        return lstPessoa;
-    }
-    //retorna o id do usuário a partir do apiId
-    public int get(String apiId){
-        int id = new DaoPessoa().get(apiId);
-        setErro(MensagemErro.NOTFOUND, "id");
-        return id;
-    }
-
-
-
+    
     //TODO - Walter : método para validar usuário usando email e senha e retornar API_ID
         /*  Este método ira precisar receber como parametro email e senha, chamar o método
             associado na DAOPessoa (precisa criar sobrecarga de método de busca, mas baseado
