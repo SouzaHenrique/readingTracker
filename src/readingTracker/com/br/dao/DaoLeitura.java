@@ -22,7 +22,7 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "insert into Leitura(id_Leitor, id_Livro, statusLeitura, paginasLidas, dataterminoPlanejado) values (?,?,?,?,?)";
+        String comando = "insert into leitura(id_Leitor, id_Livro, statusLeitura, paginasLidas, dataterminoPlanejado) values (?,?,?,?,?)";
 
 
         try {
@@ -52,7 +52,7 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ? ";
+        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
@@ -72,7 +72,7 @@ public class DaoLeitura implements Dao {
     @Override
     public boolean Delete(int id){
 
-        String comando = "DELETR FROM leitura where id = ?";
+        String comando = "DELETE FROM leitura where id = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
@@ -145,4 +145,33 @@ public class DaoLeitura implements Dao {
         return null;
     }
 
+    public List<Object> getListById(int id){
+        List<Object> lstLeitura = new ArrayList<>();
+        String comando = "select * from Leitura where id_leitor = ?";
+
+        try{
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                LeituraModel oLeitura = new LeituraModel(
+                        rs.getInt("id"),
+                        rs.getInt("id_Leitor"),
+                        rs.getInt("id_Livro"),
+                        rs.getInt("statusLeitura"),
+                        rs.getInt("paginasLidas"),
+                        rs.getString("dataterminoPlanejado")
+                );
+                lstLeitura.add(oLeitura);
+            }
+
+            return lstLeitura;
+        }catch(SQLException ex){
+            Logger.getLogger(DaoLeitura.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
+        }
+
+        return null;
+    }
+
 }
+
