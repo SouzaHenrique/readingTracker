@@ -1,7 +1,5 @@
 package readingTracker.com.br.model;
 
-import java.util.Date;
-
 public class PessoaModel {
 
     private int Id;
@@ -12,6 +10,8 @@ public class PessoaModel {
     private String Senha;
     private String ApiId;
     private Boolean isAtivo;
+
+    public PessoaModel(){}
 
     public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, String apiId ,Boolean isAtivo) {
         this.setNome(nome);
@@ -71,15 +71,11 @@ public class PessoaModel {
         Senha = senha;
     }
 
-    public Boolean getStatusPessoa() { return isAtivo;    }
-
-    public void setStatusPessoa(Boolean statusPessoa) { this.isAtivo = isAtivo; }
-
     public String getApiId() { return ApiId; }
 
     public void setApiId(String apiId) {ApiId = apiId; }
 
-    public Boolean getAtivo() {return isAtivo; }
+    public boolean getAtivo() {return isAtivo; }
 
     public void setAtivo(Boolean ativo) { isAtivo = ativo; }
 }

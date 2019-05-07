@@ -24,21 +24,7 @@ public class DaoLivro implements Dao {
 
         String comando = "insert into Livro(titulo, autor, anoPublicacao, editora, quantidadePaginas, quantidadeLeituras) values (?,?,?,?,?,?)";
 
-        try {
-            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, oLivro.getTitulo());
-            stmt.setString(2, oLivro.getAutor());
-            stmt.setString(3, oLivro.getAnoPublicacao());
-            stmt.setString(4, oLivro.getEditora());
-            stmt.setInt(5, oLivro.getQuantidadePaginas());
-            stmt.setLong(6, oLivro.getQuantidadeLeituras());
-            stmt.execute();
-
-            return true;
-
-        } catch (SQLException ex) {
-            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (PrepareStatement(oLivro, comando)) return true;
 
         return false;
     }
@@ -55,9 +41,14 @@ public class DaoLivro implements Dao {
 
         String comando = "UPDATE livro SET titulo = ?, autor = ? , anoPublicacao = ?, editora = ?, quantidadePaginas = ?, quantidadeLeitura = ? ";
 
+        if (PrepareStatement(oLivro, comando)) return true;
+        return false;
+    }
+
+    private boolean PrepareStatement(LivroModel oLivro, String comando) {
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, oLivro.getAutor());
+            stmt.setString(1, oLivro.getTitulo());
             stmt.setString(2,oLivro.getAutor());
             stmt.setString(3, oLivro.getAnoPublicacao());
             stmt.setString(4, oLivro.getEditora());
@@ -154,4 +145,40 @@ public class DaoLivro implements Dao {
 
         return null;
     }
+
+    public List<Object> Select(String Titulo) {
+
+            List<Object> lstLivro = new ArrayList<>();
+
+            try {
+                String comando = "select * from Livro where titulo = ?";
+
+                PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+                stmt.setString(1, Titulo);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    LivroModel livro = new LivroModel
+                            (rs.getInt("id"),
+                            rs.getString("titulo"),
+                            rs.getString("autor"),
+                            rs.getString("anoPublicacao"),
+                            rs.getString("editora"),
+                            rs.getInt("quantidadePaginas"),
+                            rs.getLong("quantidadeLeituras"));
+                    lstLivro.add(livro);
+
+                }
+
+                return lstLivro;
+
+            } catch (SQLException ex) {
+
+                System.out.println("Erro ao listar Livros pelo Titulo" + ex.getMessage());
+
+            }
+
+        return null;
+    }
+
 }

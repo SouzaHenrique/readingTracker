@@ -77,7 +77,7 @@ public class DaoTenant implements Dao{
 
     @Override
     public List<Object> get() {
-        List<Object> lstTenant = new ArrayList<Object>();
+        List<Object> lstTenant = new ArrayList<>();
         String comando = "SELECT * FROM tenant";
 
         try{
