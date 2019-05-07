@@ -1,0 +1,11 @@
+
+.idea/
+out/
+
+lib/
+classes/
+target/
+readingTracker.iml
+readingTrackerMaven.iml
+
+
