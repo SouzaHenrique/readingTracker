@@ -1,7 +1,11 @@
 
 .idea/
 out/
-target/
+
+lib/
+classes/
 target/
 readingTracker.iml
+readingTrackerMaven.iml
+
 
