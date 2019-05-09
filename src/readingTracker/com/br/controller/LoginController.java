@@ -7,8 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.deploy.net.HttpRequest;
+
+import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.model.PessoaModel;
 
 public class LoginController extends HttpServlet {
@@ -102,5 +106,8 @@ public class LoginController extends HttpServlet {
 
         return autenticaco;
     }
+
+
+
 
 }
