@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.sun.deploy.net.HttpRequest;
 
+import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.model.PessoaModel;
 
@@ -45,13 +46,21 @@ public class LoginController extends HttpServlet {
 
                     if(emailForm != null && senhaForm != null && !emailForm.isEmpty() && !senhaForm.isEmpty()){
 
+                        PessoaModel oPessoaModel = new PessoaModel();
+                        PessoaBLL oPessoaBLL = new PessoaBLL();
+
+                        oPessoaBLL = oPessoaBLL;
+
                         autenticado = isLoginValid(emailForm, senhaForm);
+
 
                         if (autenticado) {
 
-                            session.setAttribute("logado", "true");
+                            session.setAttribute("APID", oPessoaModel.getApiId());
                             session.setMaxInactiveInterval(5);
                             response.sendRedirect("logado.jsp");
+
+                            String API = (String) session.getAttribute("APID");
 
                         }else{
                             response.setContentType("text/html");
