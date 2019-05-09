@@ -39,11 +39,13 @@ public class LeituraBLL {
     }
 
     public boolean editarLeitura(LeituraModel oLeitura){
-
-        if(daoLeitura.Update(oLeitura)){
-            return true;
+        try {
+            if (daoLeitura.Update(oLeitura)) {
+                return true;
+            }
+        }catch (Exception ex){
+            Logger.getLogger(LeituraBLL.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return false;
     }
 
