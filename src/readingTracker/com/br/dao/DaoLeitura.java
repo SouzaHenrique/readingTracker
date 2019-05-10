@@ -52,7 +52,7 @@ public class DaoLeitura implements Dao {
             return false;
         }
 
-        String comando = "update leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id_leitura = ?";
+        String comando = "UPDATE leitura set statusLeitura = ? , paginasLidas = ? , dataterminoPlanejado = ? where id = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
@@ -145,8 +145,8 @@ public class DaoLeitura implements Dao {
         return null;
     }
 
-    public List<Object> getListById(int id){
-        List<Object> lstLeitura = new ArrayList<>();
+    public List<LeituraModel> getListById(int id){
+        List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
         String comando = "select * from Leitura where id_leitor = ?";
 
         try{

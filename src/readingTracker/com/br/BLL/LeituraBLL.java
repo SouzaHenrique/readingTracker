@@ -49,8 +49,8 @@ public class LeituraBLL {
         return false;
     }
 
-    public List<Object> listarLeituras(int id){
-        List<Object> lstLeitura = new ArrayList<>();
+    public List<LeituraModel> listarLeituras(int id){
+        List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
 
         lstLeitura = daoLeitura.getListById(id);
 
