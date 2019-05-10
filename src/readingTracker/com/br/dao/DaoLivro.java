@@ -100,8 +100,8 @@ public class DaoLivro implements Dao {
                 rs.getString("autor");
                 rs.getString("anoPublicacao");
                 rs.getString("editora");
-                rs.getString("quantidadePaginas");
-                rs.getString("quantidadeLeituras");
+                rs.getInt("quantidadePaginas");
+                rs.getLong("quantidadeLeituras");
             }
 
             return oLivro;
@@ -151,7 +151,7 @@ public class DaoLivro implements Dao {
             List<LivroModel> lstLivro = new ArrayList<>();
 
             try {
-                String comando = "SELECT * FROM Livro WHERE titulo = ?";
+                String comando = "SELECT * FROM livro WHERE titulo = ?";
 
                 PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
                 stmt.setString(1, Titulo);
@@ -177,6 +177,37 @@ public class DaoLivro implements Dao {
                 System.out.println("Erro ao listar Livros pelo Título" + ex.getMessage());
 
             }
+
+        return null;
+    }
+
+    public Object selectLivroByTitulo(String Titulo) {
+
+        LivroModel oLivro = null;
+        String comando = "SELECT * FROM livro WHERE titulo = ?";
+
+        try{
+
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setString(1, Titulo);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                oLivro = new LivroModel();
+                rs.getInt("id");
+                rs.getString("titulo");
+                rs.getString("autor");
+                rs.getString("anoPublicacao");
+                rs.getString("editora");
+                rs.getInt("quantidadePaginas");
+                rs.getLong("quantidadeLeituras");
+            }
+
+            return oLivro;
+
+        }catch(SQLException ex){
+            Logger.getLogger(DaoLivro.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca pelo titulo");
+        }
 
         return null;
     }

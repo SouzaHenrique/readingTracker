@@ -22,24 +22,24 @@ public class LivroBLL {
         return true;
     }
 
-    public boolean novoLivro(LivroModel oLivro){
+    public boolean novoLivro(LivroModel oLivro) {
         try {
-            if (daoLivro.Save(oLivro)){
+            if (daoLivro.Save(oLivro)) {
                 return true;
             }
-        }catch (Exception ex){
-            Logger.getLogger(LeituraBLL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
-    public boolean editarLivro(LivroModel oLivro){
+    public boolean editarLivro(LivroModel oLivro) {
         try {
             if (daoLivro.Update(oLivro)) {
                 return true;
             }
-        }catch (Exception ex){
-            Logger.getLogger(LeituraBLL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -49,7 +49,7 @@ public class LivroBLL {
         List<LivroModel> lstLivro = new ArrayList<>();
         lstLivro = daoLivro.getListByTitulo(Titulo);
 
-        if (lstLivro.isEmpty()){
+        if (lstLivro.isEmpty()) {
 
             BooksBLL books = BooksBLL.getInstance();
             lstLivro = books.doGetList(Titulo);
@@ -57,6 +57,28 @@ public class LivroBLL {
             return lstLivro;
         }
 
-            return lstLivro;
+        return lstLivro;
+    }
+
+    public Object selecionaLivro(String Titulo) {
+
+        try {
+            Object obj = new DaoLivro().selectLivroByTitulo(Titulo);
+            LivroModel oLivro = null;
+
+            if (obj instanceof LivroModel) {
+                oLivro = (LivroModel) obj;
+
+            } else {
+                return false;
+            }
+
+            return null;
+
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+
     }
 }
