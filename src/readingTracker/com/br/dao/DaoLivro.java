@@ -22,7 +22,7 @@ public class DaoLivro implements Dao {
             return false;
         }
 
-        String comando = "insert into Livro(titulo, autor, anoPublicacao, editora, quantidadePaginas, quantidadeLeituras) values (?,?,?,?,?,?)";
+        String comando = "INSERT INTO Livro(titulo, autor, anoPublicacao, editora, quantidadePaginas, quantidadeLeituras) values (?,?,?,?,?,?)";
 
         if (PrepareStatement(oLivro, comando)) return true;
 
@@ -39,7 +39,7 @@ public class DaoLivro implements Dao {
             return false;
         }
 
-        String comando = "UPDATE livro SET titulo = ?, autor = ? , anoPublicacao = ?, editora = ?, quantidadePaginas = ?, quantidadeLeitura = ? ";
+        String comando = "UPDATE livro SET titulo = ?, autor = ? , anoPublicacao = ?, editora = ?, quantidadePaginas = ?, quantidadeLeituras = ? ";
 
         if (PrepareStatement(oLivro, comando)) return true;
         return false;
@@ -66,7 +66,7 @@ public class DaoLivro implements Dao {
 
     @Override
     public boolean Delete(int id) {
-        String comando = "delete from livro where id = ?";
+        String comando = "DELETE FROM livro WHERE id = ?";
 
         try{
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
@@ -85,7 +85,7 @@ public class DaoLivro implements Dao {
     public Object get(int id) {
 
         LivroModel oLivro = null;
-        String comando = "SELECT * FROM leitura WHERE id = ?";
+        String comando = "SELECT * FROM livro WHERE id = ?";
 
         try{
 
@@ -101,7 +101,7 @@ public class DaoLivro implements Dao {
                 rs.getString("anoPublicacao");
                 rs.getString("editora");
                 rs.getString("quantidadePaginas");
-                rs.getString("quantidadeLeitura");
+                rs.getString("quantidadeLeituras");
             }
 
             return oLivro;
@@ -120,7 +120,7 @@ public class DaoLivro implements Dao {
         List<Object> lstLivro = new ArrayList<>();
 
         try {
-            String comando = "select * from Livro";
+            String comando = "SELECT * FROM Livro";
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
 
             ResultSet rs = stmt.executeQuery();
@@ -146,12 +146,12 @@ public class DaoLivro implements Dao {
         return null;
     }
 
-    public List<Object> Select(String Titulo) {
+    public List<LivroModel> getListByTitulo(String Titulo) {
 
-            List<Object> lstLivro = new ArrayList<>();
+            List<LivroModel> lstLivro = new ArrayList<>();
 
             try {
-                String comando = "select * from Livro where titulo = ?";
+                String comando = "SELECT * FROM Livro WHERE titulo = ?";
 
                 PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
                 stmt.setString(1, Titulo);
@@ -174,7 +174,7 @@ public class DaoLivro implements Dao {
 
             } catch (SQLException ex) {
 
-                System.out.println("Erro ao listar Livros pelo Titulo" + ex.getMessage());
+                System.out.println("Erro ao listar Livros pelo Título" + ex.getMessage());
 
             }
 
