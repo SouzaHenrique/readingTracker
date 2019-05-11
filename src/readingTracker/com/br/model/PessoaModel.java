@@ -75,7 +75,7 @@ public class PessoaModel {
 
     public void setApiId(String apiId) {ApiId = apiId; }
 
-    public boolean getAtivo() {return isAtivo; }
+    public Boolean getAtivo() {return isAtivo; }
 
     public void setAtivo(Boolean ativo) { isAtivo = ativo; }
 }

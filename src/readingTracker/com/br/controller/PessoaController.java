@@ -1,5 +1,7 @@
 package readingTracker.com.br.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.PessoaModel;
 
@@ -10,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PessoaController extends HttpServlet {
 
@@ -29,36 +34,81 @@ public class PessoaController extends HttpServlet {
         PessoaBLL oPessoaBLL = new PessoaBLL();
 
 
+        int id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")): 0 ;
+        String nome = request.getParameter("nome");
+        String sobrenome = request.getParameter("sobrenome");
+        String dataNascimento = request.getParameter("dataNascimento");
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
+        String apiId = request.getParameter("apiId");
+        String statusPessoa = request.getParameter("isAtivo");
+        Boolean isAtivo = null;
+
+        if(statusPessoa != null){
+            isAtivo = statusPessoa != "0";
+        }
+
         String action = request.getParameter("action");
 
-        //TODO - Walter : Popular oPessoaModel com os parâmetros do request
+        PessoaModel pessoaModel = new PessoaModel(id,nome,sobrenome,dataNascimento,email,senha,apiId,isAtivo);
+        PessoaBLL pessoaBLL = new PessoaBLL();
+        List<Object> obj = new ArrayList<>();
+        String mensagem = "";
 
-        switch (action){
+        if(action != null) {
+            switch (action) {
 
-            case "create":{
-                //TODO -  Walter : chamar método BLL para incluir registro de pessoa
-                break;
+                case "create": {
+                    if (pessoaBLL.save(pessoaModel)) {
+                        mensagem = "registro inserido com sucesso!";
+                    } else {
+                        mensagem = "Erro ao inserir dados";
+                    }
+                    obj.add(mensagem);
+                    break;
+                }
+
+                case "edit": {
+
+                    if (pessoaBLL.update(pessoaModel)) {
+                        mensagem = "Alteração feita com sucesso!";
+                    } else {
+                        mensagem = "Erro ao alterar dados";
+                    }
+                    obj.add(mensagem);
+                    break;
+                }
+
+                case "listar": {
+                    List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
+                    mensagem = "Listagem de todos os usuarios";
+                    obj.add(mensagem);
+                    obj.add(lstPessoa);
+                    break;
+                }
+
+                case "obterPorID": {
+                    pessoaModel = pessoaBLL.ObterPessoaPorID(id);
+                    mensagem = "Registro encontrado com sucesso!";
+                    obj.add(mensagem);
+                    obj.add(pessoaModel);
+                    break;
+                }
+
             }
 
-            case "edit":{
-                //TODO - Walter : chamar método BLL para alterar registro de pessoa
-                break;
-            }
-
-            case "listar":{
-
-                //TODO - Walter : chamar método da BLL para listar todas as pessoas
-                break;
-            }
-
-            case "obter":{
-                // TODO Walter : Chamar méotod da BLL para obter um registro por ID
-            }
-
+        } else {
+            mensagem = "Não especificado parâmetro de ação";
         }
+
+        Type listOfLeituraObject = new TypeToken<Object>(){}.getType();
+
+        String json = new Gson().toJson(obj,listOfLeituraObject);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
 
     }
-
 
 }

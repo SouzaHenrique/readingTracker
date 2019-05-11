@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import readingTracker.com.br.dao.DaoPessoa;
 import readingTracker.com.br.model.LivroModel;
 
 import java.io.IOException;
@@ -82,30 +83,34 @@ public class BooksBLL {
 
     public List<LivroModel> doGetList(String query){
         String json = doRequest(query);
-
-        JsonParserFactory factory = JsonParserFactory.getInstance();
-        JSONParser parser = factory.newJsonParser();
-        Map jsonMap = parser.parseJson(json);
-
         List<LivroModel> lstLivro = new ArrayList<>();
 
-        jsonMap.forEach((Object key, Object value) -> {
-            ArrayList<Map> items = (ArrayList<Map>) value;
+        try {
+            JsonParserFactory factory = JsonParserFactory.getInstance();
+            JSONParser parser = factory.newJsonParser();
+            Map jsonMap = parser.parseJson(json);
 
-            for (Map item : items) {
-                Map volumeInfo = (Map) item.get("volumeInfo");
+            jsonMap.forEach((Object key, Object value) -> {
+                ArrayList<Map> items = (ArrayList<Map>) value;
+
+                for (Map item : items) {
+                    Map volumeInfo = (Map) item.get("volumeInfo");
 
 
-                LivroModel modelLivro = new LivroModel();
-                modelLivro.setAnoPublicacao(volumeInfo.get("publishedDate") != null ? (String) volumeInfo.get("publishDate") : null);
-                modelLivro.setEditora(volumeInfo.get("publisher") != null ? (String) volumeInfo.get("publisher") : null);
-                modelLivro.setQuantidadePaginas(volumeInfo.get("pageCount") != null ? Integer.parseInt((String)volumeInfo.get("pageCount")) : null);
-                modelLivro.setTitulo(volumeInfo.get("title") != null ? (String) volumeInfo.get("title") : null);
-                ArrayList<String> autor = (ArrayList<String>) volumeInfo.get("authors");
-                modelLivro.setAutor(autor.get(0) != null ? (String) autor.get(0) : null);
-                lstLivro.add(modelLivro);
-            }
-        });
+                    LivroModel modelLivro = new LivroModel();
+                    modelLivro.setAnoPublicacao(volumeInfo.get("publishedDate") != null ? (String) volumeInfo.get("publishDate") : null);
+                    modelLivro.setEditora(volumeInfo.get("publisher") != null ? (String) volumeInfo.get("publisher") : null);
+                    modelLivro.setQuantidadePaginas(volumeInfo.get("pageCount") != null ? Integer.parseInt((String) volumeInfo.get("pageCount")) : 0);
+                    modelLivro.setTitulo(volumeInfo.get("title") != null ? (String) volumeInfo.get("title") : null);
+                    ArrayList<String> autor = (ArrayList<String>) volumeInfo.get("authors");
+                    modelLivro.setAutor(autor.get(0) != null ? (String) autor.get(0) : null);
+                    lstLivro.add(modelLivro);
+                }
+            });
+        } catch(NullPointerException ex){
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, "Erro ao pegar registros da api");
+            return null;
+        }
 
         return lstLivro;
     }
