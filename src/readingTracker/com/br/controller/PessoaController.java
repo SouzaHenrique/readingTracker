@@ -108,7 +108,7 @@ public class PessoaController extends HttpServlet {
 
         Type listOfLeituraObject = new TypeToken<Object>(){}.getType();
 
-        String json = new Gson().toJson(obj);
+        String json = new Gson().toJson(obj,listOfLeituraObject);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
