@@ -1,9 +1,12 @@
 package readingTracker.com.br.BLL;
 
 import readingTracker.com.br.dao.DaoLivro;
+import readingTracker.com.br.model.LivroModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LivroBLL {
 
@@ -19,22 +22,63 @@ public class LivroBLL {
         return true;
     }
 
-    public List<Object> buscaLivros(String Titulo) {
+    public boolean novoLivro(LivroModel oLivro) {
+        try {
+            if (daoLivro.Save(oLivro)) {
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
-        List<Object> lstLivro = new ArrayList<>();
-        lstLivro = daoLivro.Select(Titulo);
+    public boolean editarLivro(LivroModel oLivro) {
+        try {
+            if (daoLivro.Update(oLivro)) {
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 
-        if (lstLivro.isEmpty()){
+    public List<LivroModel> buscaLivros(String Titulo) {
 
-            //Implementar método de busca de livros na API.
-            //lstLivro = BooksAPI.getapi;
+        List<LivroModel> lstLivro = new ArrayList<>();
+        lstLivro = daoLivro.getListByTitulo(Titulo);
 
+        if (lstLivro.isEmpty()) {
 
+            BooksBLL books = BooksBLL.getInstance();
+            lstLivro = books.doGetList(Titulo);
 
             return lstLivro;
         }
 
-            return lstLivro;
+        return lstLivro;
+    }
+
+    public Object selecionaLivro(String Titulo) {
+
+        try {
+            Object obj = new DaoLivro().selectLivroByTitulo(Titulo);
+            LivroModel oLivro = null;
+
+            if (obj instanceof LivroModel) {
+                oLivro = (LivroModel) obj;
+
+            } else {
+                return false;
+            }
+
+            return null;
+
+        } catch (Exception ex) {
+            Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
 
     }
 }
