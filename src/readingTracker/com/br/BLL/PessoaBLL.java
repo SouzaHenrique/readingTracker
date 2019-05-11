@@ -247,4 +247,14 @@ public class PessoaBLL {
     }
 
 
+
+    //TODO - Walter : método para validar usuário usando email e senha e retornar API_ID
+        /*  Este método ira precisar receber como parametro email e senha, chamar o método
+            associado na DAOPessoa (precisa criar sobrecarga de método de busca, mas baseado
+            nestes parâmetros e retornar o API_ID associado a esta pessoa.
+        */
+
+// PS: Use os comentários que seguem os to do como descritivo para o método criado
+
+
 }
