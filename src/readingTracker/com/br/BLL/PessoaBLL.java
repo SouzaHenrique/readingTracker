@@ -27,6 +27,7 @@ public class PessoaBLL {
         INVALID,
         OBJECT,
         DAO,
+        LOGIN,
         NOTFOUND;
     }
 
@@ -56,6 +57,10 @@ public class PessoaBLL {
             case OBJECT: {
                 mensagem = "Objeto não correnponde a uma instância de " + this.log;
 
+            }
+
+            case LOGIN:{
+                mensagem = "Login ou senha incorretos!";
             }
 
             case NOTFOUND: {
@@ -161,6 +166,7 @@ public class PessoaBLL {
          }
 
          if(isObjetoValido(pessoa)){
+             pessoa.setAtivo(true);
              if(new DaoPessoa().Update(pessoa)){
                  return true;
              } else {
@@ -171,16 +177,6 @@ public class PessoaBLL {
          }
          return false;
      }
-
-    public boolean update (boolean status) {
-
-        if(new DaoPessoa().Update(status)){
-            return true;
-        } else {
-            setErro(MensagemErro.DAO, "alterar");
-        }
-        return false;
-    }
 
     //get por id
     public Object get(int id){
@@ -246,15 +242,9 @@ public class PessoaBLL {
         return id;
     }
 
-
-
-    //TODO - Walter : método para validar usuário usando email e senha e retornar API_ID
-        /*  Este método ira precisar receber como parametro email e senha, chamar o método
-            associado na DAOPessoa (precisa criar sobrecarga de método de busca, mas baseado
-            nestes parâmetros e retornar o API_ID associado a esta pessoa.
-        */
-
-// PS: Use os comentários que seguem os to do como descritivo para o método criado
+    public String get(String email, String senha){
+        return new DaoPessoa().get(email,senha);
+    }
 
 
 }
