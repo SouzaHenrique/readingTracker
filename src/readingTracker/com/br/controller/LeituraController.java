@@ -80,7 +80,8 @@ public class LeituraController extends HttpServlet{
                         olivroBLL.novoLivro(oLivro);
 
                         //Setando ID do livro (caso não exista na base)
-                        oLeitura.setId_Livro(olivroBLL.buscaLivroById());
+                        oLivro = olivroBLL.selecionaLivro(titulo);
+                        oLeitura.setId_Livro(oLivro.getId());
 
                     } else {
                         //Setando ID do livro (caso exista na base)
