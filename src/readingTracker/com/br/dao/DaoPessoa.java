@@ -41,7 +41,7 @@ public class DaoPessoa implements Dao {
                 stmt.close();
                 /*----------------------------------*/
 
-                comando = "select max(id) from pessoa";
+                comando = "select max(id) id from pessoa";
                 stmt = con.prepareStatement(comando);
                 ResultSet rs = stmt.executeQuery();
                 if(rs.next()){
@@ -211,32 +211,40 @@ public class DaoPessoa implements Dao {
         return null;
     }
 
-    public int get(String apiId){
-        int valor = 0;
-        String comando = "select id from pessoa where apiId = ?";
+    public Object get(String apiId){
+        PessoaModel pessoa;
+        String comando = "select * from pessoa where apiId = ?";
 
         try{
             PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setString(1, apiId);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
-                valor = rs.getInt("id");
-            } else {
-                return 0;
+            if (rs.next()) {
+                pessoa = new PessoaModel(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
+                        rs.getString("dataNascimento"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("apiId"),
+                        rs.getBoolean("statusPessoa")
+                );
+                return pessoa;
             }
 
         } catch (SQLException e){
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
-            return 0;
+            return null;
         }
 
-        return valor;
+        return null;
     }
 
     public String get (String login, String senha){
-        String valor = "";
-        String comando = "select apiId from pessoa where login = ? and senha = ?";
+        PessoaModel pessoa;
+        String comando = "select * from pessoa where login = ? and senha = ?";
 
         try{
             PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
@@ -244,10 +252,18 @@ public class DaoPessoa implements Dao {
             stmt.setString(1, senha);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
-                valor = rs.getString("apiId");
-            } else {
-                return "";
+            if (rs.next()) {
+                pessoa = new PessoaModel(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sobrenome"),
+                        rs.getString("dataNascimento"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("apiId"),
+                        rs.getBoolean("statusPessoa")
+                );
+                return pessoa.getApiId();
             }
 
         } catch (SQLException e){
@@ -255,6 +271,6 @@ public class DaoPessoa implements Dao {
             return "";
         }
 
-        return valor;
+        return null;
     }
 }

@@ -100,7 +100,7 @@ public class BooksBLL {
                     LivroModel modelLivro = new LivroModel();
                     modelLivro.setAnoPublicacao(volumeInfo.get("publishedDate") != null ? (String) volumeInfo.get("publishDate") : null);
                     modelLivro.setEditora(volumeInfo.get("publisher") != null ? (String) volumeInfo.get("publisher") : null);
-                    modelLivro.setQuantidadePaginas(volumeInfo.get("pageCount") != null ? Integer.parseInt((String) volumeInfo.get("pageCount")) : null);
+                    modelLivro.setQuantidadePaginas(volumeInfo.get("pageCount") != null ? Integer.parseInt((String) volumeInfo.get("pageCount")) : 0);
                     modelLivro.setTitulo(volumeInfo.get("title") != null ? (String) volumeInfo.get("title") : null);
                     ArrayList<String> autor = (ArrayList<String>) volumeInfo.get("authors");
                     modelLivro.setAutor(autor.get(0) != null ? (String) autor.get(0) : null);

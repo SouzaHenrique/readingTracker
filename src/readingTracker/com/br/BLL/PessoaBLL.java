@@ -5,246 +5,119 @@ import readingTracker.com.br.model.PessoaModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PessoaBLL {
 
+    private DaoPessoa oDaoPessoa = new DaoPessoa();
 
-        /*  Este método válida os campos do objeto que veio para verificar se
-            ele condiz com os campos not null da tabela pessoa retornando uma string com
-            informando que tal campo é requerido.
-        */
 
-    public String log; /*essa variável será a responsável por mostrar para os outros métodos, qual é o problema
-                       que está ocorrendo na validação*/
+    public boolean isPessoaValid(PessoaModel oPessoaModel) {
 
-    public enum MensagemErro {
-        NULL,
-        INVALID,
-        OBJECT,
-        DAO,
-        LOGIN,
-        NOTFOUND;
-    }
-
-    MensagemErro erro;
-
-    public void setErro(MensagemErro MsgErro, String log){
-        erro = MsgErro;
-        this.log = log;
-    }
-
-    public String getErro(){
-        String mensagem = "";
-        switch(erro){
-
-            case NULL: {
-                mensagem = "O preenchimento do campo '" + this.log + "' é obrigatório!";
-            }
-
-            case INVALID: {
-                mensagem = this.log + "é inválido!";
-            }
-
-            case DAO: {
-                mensagem = "Não foi possível " + this.log + " o registro do usuário";
-            }
-
-            case OBJECT: {
-                mensagem = "Objeto não correnponde a uma instância de " + this.log;
-
-            }
-
-            case LOGIN:{
-                mensagem = "Login ou senha incorretos!";
-            }
-
-            case NOTFOUND: {
-                mensagem = this.log + " não encontrado!";
-            }
-            default:{
-                mensagem = "sem erros aparentes!";
-            }
+        if (oPessoaModel.getNome().isEmpty()) {
+            return false;
         }
 
-        return mensagem;
-    }
+        if (oPessoaModel.getSobrenome().isEmpty()) {
+            return false;
+        }
 
-     public boolean isObjetoValido(Object object){
-         PessoaModel pessoa = null;
-         if (object instanceof PessoaModel) {
-             pessoa = (PessoaModel) object;
-         } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
-             return false;
-         }
-         /*
-            esse método faz o caminho reveso, ele recebe como padrão o verdadeiro, e se todas as validações
-            estiverem ok, ele continuará true até o final da validação
+        if (oPessoaModel.getEmail().isEmpty()) {
+            return false;
+        }
+
+        if (oPessoaModel.getSenha().isEmpty()) {
+            return false;
+        }
+
+        //Valida formato de data
+        try {
+            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+            formatoData.setLenient(false);
+            Date dataParseada = formatoData.parse(oPessoaModel.getDataNascimento());
+
+        } catch (ParseException ex) {
+            return false;
+        }
+
+        // Valida email - regex
+        final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(oPessoaModel.getEmail());
+        if (!matcher.find()) {
+            return false;
+        }
+
+         /*Se for um objeto valido e não tiver ID
+         Trata-se de uma inserção então não geramos API ID nem mexemos no status
          */
-         //começar validando campos que não podem ser nuláveis
-
-         if(pessoa.getNome() == null){
-             setErro(MensagemErro.NULL, "nome");
-             return false;
-         }
-
-         if(pessoa.getSenha() == null){
-             setErro(MensagemErro.NULL, "senha");
-             return false;
-         }
-
-         //agora eu preciso validar se a data recebida pelo objeto condiz como uma data real (dd/mm/aaaa)
-
-
-         try {
-             SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-             formatoData.setLenient(false);
-             Date dataParseada = formatoData.parse(pessoa.getDataNascimento());
-             // se parseou, data válida (de verdade)!
-         } catch (ParseException ex) {
-             // data inválida! Não parseou.
-             // então, não válido!
-             setErro(MensagemErro.INVALID, "DataNascimento");
-             return false;
-         }
-
-         // agora eu preciso validar se o email digitado é de fato um email!
-         if(pessoa.getEmail() != null) {
-             int arroba = pessoa.getEmail().indexOf('@');
-             int ponto = pessoa.getEmail().indexOf('.');
-
-             if (!(arroba > 0 && ponto > arroba)) {
-                 setErro(MensagemErro.INVALID, "email");
-                 return false;
-             }
-         } else {
-             setErro(MensagemErro.NULL, "email");
-             return false;
-         }
-
-         return true;
-
-     }
-
-     public boolean save(Object object){
-         PessoaModel pessoa = null;
-         if (object instanceof PessoaModel) {
-             pessoa = (PessoaModel) object;
-         } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
-             return false;
-         }
-
-         UUID uuid = UUID.randomUUID();
-         if(isObjetoValido(pessoa)){
-             pessoa.setAtivo(true);
-             pessoa.setApiId(uuid.toString());
-             if(new DaoPessoa().Save(pessoa)){
-                 return true;
-             } else {
-                 setErro(MensagemErro.DAO, "inserir");
-             }
-         } else {
-             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-         }
-
-         return false;
-     }
-
-     public boolean update (Object object) {
-         PessoaModel pessoa = null;
-         if (object instanceof PessoaModel) {
-             pessoa = (PessoaModel) object;
-         } else {
-             setErro(MensagemErro.OBJECT, "PessoaModel");
-             return false;
-         }
-
-         if(isObjetoValido(pessoa)){
-             pessoa.setAtivo(true);
-             if(new DaoPessoa().Update(pessoa)){
-                 return true;
-             } else {
-                 setErro(MensagemErro.DAO, "alterar");
-             }
-         } else {
-             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-         }
-         return false;
-     }
-
-    //get por id
-    public Object get(int id){
-        Object obj = new DaoPessoa().get(id);
-        PessoaModel pessoa = null;
-        if (obj instanceof PessoaModel) {
-            pessoa = (PessoaModel) obj;
-        } else {
-            setErro(MensagemErro.OBJECT, "PessoaModel");
-            return null;
+        if (oPessoaModel.getId() == 0) {
+            oPessoaModel.setAtivo(true);
+            oPessoaModel.setApiId(UUID.randomUUID().toString());
         }
 
-        if(isObjetoValido(obj)){
-            return pessoa;
+        return true;
+    }
+
+    public boolean save(PessoaModel oPessoaModel) {
+
+        if (isPessoaValid(oPessoaModel)) {
+
+            return oDaoPessoa.Save(oPessoaModel);
+
         } else {
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
+
+            return false;
+
         }
+    }
+
+    public boolean update(PessoaModel oPessoaModel) {
+
+        if (isPessoaValid(oPessoaModel)) {
+            return oDaoPessoa.Update(oPessoaModel);
+        }
+
+        return false;
+    }
+
+    public PessoaModel ObterPessoaPorID(int id) {
+
+        PessoaModel oPessoaModel = new PessoaModel();
+        return oPessoaModel = (PessoaModel) oDaoPessoa.get(id);
+    }
+
+    public List<PessoaModel> ObterPessoas() {
+
+        // Casting de um supertipo para um subtipo
+        List<PessoaModel> lstPessoas = new ArrayList<>();
+        return lstPessoas = (List<PessoaModel>) (List<?>) oDaoPessoa.get();
+    }
+
+    public PessoaModel ObterPessoaPorAPIID(String apiId) {
+
+        PessoaModel oPessoaModel = new PessoaModel();
+
+        return oPessoaModel = (PessoaModel) oDaoPessoa.get(apiId);
+
+    }
+
+    public String ObterAPIID(PessoaModel oPessoaModel){
+
+        String API_ID = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
+
+        if(!API_ID.isEmpty() && !API_ID.equals(null)){
+            return API_ID;
+        }
+
         return null;
     }
-    //retorna uma lista com todos os registros
-    public List<PessoaModel> get(){
-        List<Object> lstObj = new DaoPessoa().get();
-        PessoaModel pessoa = null;
-        List<PessoaModel> lstPessoa = null;
-        for(Object obj : lstObj) {
-            if (obj instanceof PessoaModel) {
-                if(isObjetoValido(obj)) {
-                    lstPessoa.add((PessoaModel) obj);
-                } else {
-                    Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-                }
-            } else {
-                setErro(MensagemErro.OBJECT, "PessoaModel");
-                return null;
-            }
-        }
-        return lstPessoa;
-    }
-
-    //retorna uma lista com os usuários ativos ou inativos do sistema (campo statusPessoa)
-    public List<PessoaModel> get(boolean status){
-        List<Object> lstObj = new DaoPessoa().get(status);
-        PessoaModel pessoa = null;
-        List<PessoaModel> lstPessoa = null;
-        for(Object obj : lstObj) {
-            if (obj instanceof PessoaModel) {
-                if(isObjetoValido(obj)) {
-                    lstPessoa.add((PessoaModel) obj);
-                } else {
-                    Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, getErro());
-                }
-            } else {
-                setErro(MensagemErro.OBJECT, "PessoaModel");
-                return null;
-            }
-        }
-        return lstPessoa;
-    }
-    //retorna o id do usuário a partir do apiId
-    public int get(String apiId){
-        int id = new DaoPessoa().get(apiId);
-        setErro(MensagemErro.NOTFOUND, "id");
-        return id;
-    }
-
-    public String get(String email, String senha){
-        return new DaoPessoa().get(email,senha);
-    }
-
 
 }
