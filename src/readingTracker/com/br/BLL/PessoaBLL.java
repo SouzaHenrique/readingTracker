@@ -27,7 +27,6 @@ public class PessoaBLL {
         INVALID,
         OBJECT,
         DAO,
-        LOGIN,
         NOTFOUND;
     }
 
@@ -57,10 +56,6 @@ public class PessoaBLL {
             case OBJECT: {
                 mensagem = "Objeto não correnponde a uma instância de " + this.log;
 
-            }
-
-            case LOGIN:{
-                mensagem = "Login ou senha incorretos!";
             }
 
             case NOTFOUND: {
@@ -166,7 +161,6 @@ public class PessoaBLL {
          }
 
          if(isObjetoValido(pessoa)){
-             pessoa.setAtivo(true);
              if(new DaoPessoa().Update(pessoa)){
                  return true;
              } else {
@@ -177,6 +171,16 @@ public class PessoaBLL {
          }
          return false;
      }
+
+    public boolean update (boolean status) {
+
+        if(new DaoPessoa().Update(status)){
+            return true;
+        } else {
+            setErro(MensagemErro.DAO, "alterar");
+        }
+        return false;
+    }
 
     //get por id
     public Object get(int id){
@@ -240,10 +244,6 @@ public class PessoaBLL {
         int id = new DaoPessoa().get(apiId);
         setErro(MensagemErro.NOTFOUND, "id");
         return id;
-    }
-
-    public String get(String email, String senha){
-        return new DaoPessoa().get(email,senha);
     }
 
 

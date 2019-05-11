@@ -77,9 +77,7 @@ public class DaoPessoa implements Dao {
         } else {
             return false;
         }
-
-        int status = pessoa.getAtivo() ? 1 : 0;
-        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?, statusPessoa = ? where id = ?";
+        String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ? where id = ?";
 
         try {
             Connection con = new ConnectionFactory().getConnection();
@@ -89,8 +87,7 @@ public class DaoPessoa implements Dao {
             stmt.setString(3, pessoa.getDataNascimento());
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
-            stmt.setInt(6, status);
-            stmt.setInt(7,pessoa.getId());
+            stmt.setInt(6,pessoa.getId());
             stmt.execute();
             stmt.close();
 
@@ -102,6 +99,24 @@ public class DaoPessoa implements Dao {
         return false;
     }
 
+    //precisa de um update para alterar apenas o status do usuário
+    public boolean Update(boolean status) {
+
+        String comando = "update pessoa set statusPessoa = ? where id = ?";
+
+        try {
+            Connection con = new ConnectionFactory().getConnection();
+            PreparedStatement stmt = con.prepareStatement(comando);
+            stmt.setBoolean(1, status);
+            stmt.execute();
+            stmt.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao alterar os dados");
+
+        }
+        return false;
+    }
 
     @Override
     public boolean Delete(int id) {
@@ -217,7 +232,6 @@ public class DaoPessoa implements Dao {
 
         try{
             PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, apiId);
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()){
@@ -229,30 +243,6 @@ public class DaoPessoa implements Dao {
         } catch (SQLException e){
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
             return 0;
-        }
-
-        return valor;
-    }
-
-    public String get (String login, String senha){
-        String valor = "";
-        String comando = "select apiId from pessoa where login = ? and senha = ?";
-
-        try{
-            PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, login);
-            stmt.setString(1, senha);
-            ResultSet rs = stmt.executeQuery();
-
-            if(rs.next()){
-                valor = rs.getString("apiId");
-            } else {
-                return "";
-            }
-
-        } catch (SQLException e){
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
-            return "";
         }
 
         return valor;

@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PessoaController extends HttpServlet {
 
@@ -60,40 +58,27 @@ public class PessoaController extends HttpServlet {
 
         PessoaModel pessoaModel = new PessoaModel(id,nome,sobrenome,dataNascimento,email,senha,apiId,isAtivo);
         PessoaBLL pessoaBLL = new PessoaBLL();
-        List<Object> obj = new ArrayList<>();
-        String mensagem = "";
         switch (action){
 
             case "create":{
-                if(pessoaBLL.save(pessoaModel)){
-                    mensagem = "registro inserido com sucesso!";
-                } else {
-                    mensagem = pessoaBLL.getErro();
-                }
+                pessoaBLL.save(pessoaModel);
                 break;
             }
 
             case "edit":{
-
-                if(pessoaBLL.update(pessoaModel)){
-                    mensagem = "Alteração feita com sucesso!";
-                } else {
-                    mensagem = pessoaBLL.getErro();
-                }
+                pessoaBLL.update(pessoaModel);
                 break;
             }
 
             case "listar":{
-                List<PessoaModel> lstPessoa = pessoaBLL.get();
+                pessoaBLL.get();
                 break;
             }
 
             case "obter":{
-                pessoaModel = (PessoaModel)pessoaBLL.get(id);
+                pessoaBLL.get(id);
                 break;
             }
-
-
 
         }
 
