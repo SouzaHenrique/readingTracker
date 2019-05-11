@@ -33,77 +33,72 @@ public class PessoaController extends HttpServlet {
         PessoaModel oPessoaModel = new PessoaModel();
         PessoaBLL oPessoaBLL = new PessoaBLL();
 
-        /*
-            private int Id;
-            private String Nome;
-            private String Sobrenome;
-            private String DataNascimento;
-            private String Email;
-            private String Senha;
-            private String ApiId;
-            private Boolean isAtivo;
-        */
 
-        //como não sei qual vai ser a ação, vou criar uma String para cada atributo utilizando o fator ternário
-
-        int id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")): null ;
-        String nome = request.getParameter("nome") != null ? request.getParameter("nome"): null;
-        String sobrenome = request.getParameter("sobrenome") != null ? request.getParameter("sobrenome"): null;
-        String dataNascimento = request.getParameter("dataNascimento") != null ? request.getParameter("dataNascimento"): null;
-        String email = request.getParameter("email") != null ? request.getParameter("email"): null;
-        String senha = request.getParameter("senha") != null ? request.getParameter("senha"): null;
-        String apiId = request.getParameter("apiId") != null ? request.getParameter("apiId"): null;
-        String statusPessoa = request.getParameter("isAtivo") != null ? request.getParameter("isAtivo"): null;
+        int id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")): 0 ;
+        String nome = request.getParameter("nome");
+        String sobrenome = request.getParameter("sobrenome");
+        String dataNascimento = request.getParameter("dataNascimento");
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
+        String apiId = request.getParameter("apiId");
+        String statusPessoa = request.getParameter("isAtivo");
         Boolean isAtivo = null;
+
         if(statusPessoa != null){
-            isAtivo = statusPessoa == "0" ? false: true;
+            isAtivo = statusPessoa != "0";
         }
 
-        String action = request.getParameter("action") != null ? request.getParameter("action") : null;
+        String action = request.getParameter("action");
 
         PessoaModel pessoaModel = new PessoaModel(id,nome,sobrenome,dataNascimento,email,senha,apiId,isAtivo);
         PessoaBLL pessoaBLL = new PessoaBLL();
         List<Object> obj = new ArrayList<>();
         String mensagem = "";
-        switch (action){
 
-            case "create":{
-                if(pessoaBLL.save(pessoaModel)){
-                    mensagem = "registro inserido com sucesso!";
-                } else {
-                    mensagem =  "Erro ao inserir dados";
+        if(action != null) {
+            switch (action) {
+
+                case "create": {
+                    if (pessoaBLL.save(pessoaModel)) {
+                        mensagem = "registro inserido com sucesso!";
+                    } else {
+                        mensagem = "Erro ao inserir dados";
+                    }
+                    obj.add(mensagem);
+                    break;
                 }
-                obj.add(mensagem);
-                break;
-            }
 
-            case "edit":{
+                case "edit": {
 
-                if(pessoaBLL.update(pessoaModel)){
-                    mensagem = "Alteração feita com sucesso!";
-                } else {
-                    mensagem = "Erro ao alterar dados";
+                    if (pessoaBLL.update(pessoaModel)) {
+                        mensagem = "Alteração feita com sucesso!";
+                    } else {
+                        mensagem = "Erro ao alterar dados";
+                    }
+                    obj.add(mensagem);
+                    break;
                 }
-                obj.add(mensagem);
-                break;
+
+                case "listar": {
+                    List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
+                    mensagem = "Listagem de todos os usuarios";
+                    obj.add(mensagem);
+                    obj.add(lstPessoa);
+                    break;
+                }
+
+                case "obterPorID": {
+                    pessoaModel = pessoaBLL.ObterPessoaPorID(id);
+                    mensagem = "Registro encontrado com sucesso!";
+                    obj.add(mensagem);
+                    obj.add(pessoaModel);
+                    break;
+                }
+
             }
 
-            case "listar":{
-                List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
-                mensagem = "Listagem de todos os usuarios";
-                obj.add(mensagem);
-                obj.add(lstPessoa);
-                break;
-            }
-
-            case "obterPorID":{
-                pessoaModel = pessoaBLL.ObterPessoaPorID(id);
-                mensagem = "Registro encontrado com sucesso!";
-                obj.add(mensagem);
-                obj.add(pessoaModel);
-                break;
-            }
-
+        } else {
+            mensagem = "Não especificado parâmetro de ação";
         }
 
         Type listOfLeituraObject = new TypeToken<Object>(){}.getType();

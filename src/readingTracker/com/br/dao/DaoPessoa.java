@@ -78,7 +78,7 @@ public class DaoPessoa implements Dao {
             return false;
         }
 
-        int status = pessoa.getAtivo() ? 1 : 0;
+        int status = pessoa.getAtivo() == null ? 1 : 0;
         String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?, statusPessoa = ? where id = ?";
 
         try {
