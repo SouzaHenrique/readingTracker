@@ -1,6 +1,5 @@
 package readingTracker.com.br.controller;
 
-import com.google.gson.Gson;
 import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.PessoaModel;
 
@@ -52,7 +51,7 @@ public class PessoaController extends HttpServlet {
         String senha = request.getParameter("senha") != null ? request.getParameter("senha"): null;
         String apiId = request.getParameter("apiId") != null ? request.getParameter("apiId"): null;
         String statusPessoa = request.getParameter("isAtivo") != null ? request.getParameter("isAtivo"): null;
-        Boolean isAtivo = null;
+        boolean isAtivo = false;
         if(statusPessoa != null){
             isAtivo = statusPessoa == "0" ? false: true;
         }
@@ -69,9 +68,8 @@ public class PessoaController extends HttpServlet {
                 if(pessoaBLL.save(pessoaModel)){
                     mensagem = "registro inserido com sucesso!";
                 } else {
-                    mensagem =  "Erro ao inserir dados";
+                    mensagem = pessoaBLL.getErro();
                 }
-                obj.add(mensagem);
                 break;
             }
 
@@ -80,36 +78,24 @@ public class PessoaController extends HttpServlet {
                 if(pessoaBLL.update(pessoaModel)){
                     mensagem = "Alteração feita com sucesso!";
                 } else {
-                    mensagem = "Erro ao alterar dados";
+                    mensagem = pessoaBLL.getErro();
                 }
-                obj.add(mensagem);
                 break;
             }
 
             case "listar":{
-                List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
-                mensagem = "Listagem de todos os usuarios";
-                obj.add(mensagem);
-                obj.add(lstPessoa);
+                List<PessoaModel> lstPessoa = pessoaBLL.get();
                 break;
             }
 
-            case "obterPorID":{
-                pessoaModel = pessoaBLL.ObterPessoaPorID(id);
-                mensagem = "Registro encontrado com sucesso!";
-                obj.add(mensagem);
-                obj.add(pessoaModel);
+            case "obter":{
+                pessoaModel = (PessoaModel)pessoaBLL.get(id);
                 break;
             }
+
+
 
         }
-
-
-        String json = new Gson().toJson(obj);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
-
 
     }
 
