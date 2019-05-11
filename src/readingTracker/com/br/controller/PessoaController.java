@@ -1,5 +1,7 @@
 package readingTracker.com.br.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.PessoaModel;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +54,7 @@ public class PessoaController extends HttpServlet {
         String senha = request.getParameter("senha") != null ? request.getParameter("senha"): null;
         String apiId = request.getParameter("apiId") != null ? request.getParameter("apiId"): null;
         String statusPessoa = request.getParameter("isAtivo") != null ? request.getParameter("isAtivo"): null;
-        boolean isAtivo = false;
+        Boolean isAtivo = null;
         if(statusPessoa != null){
             isAtivo = statusPessoa == "0" ? false: true;
         }
@@ -68,8 +71,9 @@ public class PessoaController extends HttpServlet {
                 if(pessoaBLL.save(pessoaModel)){
                     mensagem = "registro inserido com sucesso!";
                 } else {
-                    mensagem = pessoaBLL.getErro();
+                    mensagem =  "Erro ao inserir dados";
                 }
+                obj.add(mensagem);
                 break;
             }
 
@@ -78,24 +82,37 @@ public class PessoaController extends HttpServlet {
                 if(pessoaBLL.update(pessoaModel)){
                     mensagem = "Alteração feita com sucesso!";
                 } else {
-                    mensagem = pessoaBLL.getErro();
+                    mensagem = "Erro ao alterar dados";
                 }
+                obj.add(mensagem);
                 break;
             }
 
             case "listar":{
-                List<PessoaModel> lstPessoa = pessoaBLL.get();
+                List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
+                mensagem = "Listagem de todos os usuarios";
+                obj.add(mensagem);
+                obj.add(lstPessoa);
                 break;
             }
 
-            case "obter":{
-                pessoaModel = (PessoaModel)pessoaBLL.get(id);
+            case "obterPorID":{
+                pessoaModel = pessoaBLL.ObterPessoaPorID(id);
+                mensagem = "Registro encontrado com sucesso!";
+                obj.add(mensagem);
+                obj.add(pessoaModel);
                 break;
             }
-
-
 
         }
+
+        Type listOfLeituraObject = new TypeToken<Object>(){}.getType();
+
+        String json = new Gson().toJson(obj);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+
 
     }
 
