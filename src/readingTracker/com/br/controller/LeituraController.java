@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.LeituraBLL;
 import readingTracker.com.br.BLL.LivroBLL;
+import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.model.LivroModel;
 import readingTracker.com.br.model.PessoaModel;
@@ -33,6 +34,7 @@ public class LeituraController extends HttpServlet{
         //Variaveis uteis
         LeituraModel oLeitura = new LeituraModel();
         LeituraBLL oLeituraBLL = new LeituraBLL();
+        PessoaBLL oPessoaBLL= new PessoaBLL();
         PessoaModel oPessoa = new PessoaModel();
         String msg = "";
 
@@ -44,8 +46,7 @@ public class LeituraController extends HttpServlet{
         try {
             HttpSession session = request.getSession();
             String APID = ((String) session.getAttribute("APID"));
-            //TODO oPessoa = oPessoa.getByApid(APID);
-            oLeitura.setId_Leitor(oPessoa.getId());
+            oPessoa = oPessoaBll.ObterPessoaPorAPIID(APID));
         }catch (Exception ex){
             Logger.getLogger(LeituraController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,12 +63,12 @@ public class LeituraController extends HttpServlet{
 
                 case "create": {
 
-                    //Verificar se livro existe na base e insere (caso inexistente) //TODO TRY CATCH HERE?
+                    //Verificar se livro existe na base e insere (caso inexistente)
                     LivroBLL olivroBLL = new LivroBLL();
                     LivroModel oLivro = new LivroModel();
                     String titulo = request.getParameter("title");
 
-                    //TODO oLivro = olivroBLL.buscaLivroBytitulo(titulo);
+                    oLivro = olivroBLL.selecionaLivro(titulo);
 
                     if (oLivro.getId() == 0) {
                         oLivro.setTitulo(titulo);
@@ -76,10 +77,10 @@ public class LeituraController extends HttpServlet{
                         oLivro.setEditora(request.getParameter("publisher"));
                         oLivro.setQuantidadePaginas(Integer.parseInt(request.getParameter("pageCount")));
 
-                        //TODO olivroBLL.cadastrarLivro(oLivro);
+                        olivroBLL.novoLivro(oLivro);
 
                         //Setando ID do livro (caso não exista na base)
-                        //TODO oLeitura.setId_Livro(olivroBLL.buscaLivroById());
+                        oLeitura.setId_Livro(olivroBLL.buscaLivroById());
 
                     } else {
                         //Setando ID do livro (caso exista na base)
