@@ -2,6 +2,7 @@ package readingTracker.com.br.BLL;
 
 import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.dao.DaoLeitura;
+import readingTracker.com.br.model.PessoaModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class LeituraBLL {
 
             return false;
     }
+
 
     public boolean novaLeitura(LeituraModel oLeitura){
 
@@ -52,10 +54,13 @@ public class LeituraBLL {
     public List<LeituraModel> listarLeituras(int id){
         List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
 
-        lstLeitura = daoLeitura.getListById(id);
-
-        if(lstLeitura.equals(null)){
-            return null;
+        try {
+            lstLeitura = daoLeitura.getListById(id);
+            if (lstLeitura.equals(null)) {
+                return null;
+            }
+        }catch (Exception ex){
+            Logger.getLogger(LeituraBLL.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return lstLeitura;
