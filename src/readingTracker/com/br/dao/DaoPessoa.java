@@ -242,7 +242,7 @@ public class DaoPessoa implements Dao {
         return null;
     }
 
-    public String get (String login, String senha){
+    public Object get (String login, String senha){
         PessoaModel pessoa;
         String comando = "select * from pessoa where login = ? and senha = ?";
 
@@ -263,7 +263,7 @@ public class DaoPessoa implements Dao {
                         rs.getString("apiId"),
                         rs.getBoolean("statusPessoa")
                 );
-                return pessoa.getApiId();
+                return pessoa;
             }
 
         } catch (SQLException e){

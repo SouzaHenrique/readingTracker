@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.sun.deploy.net.HttpRequest;
 
 import readingTracker.com.br.BLL.PessoaBLL;
@@ -35,10 +36,13 @@ public class LoginController extends HttpServlet {
         String senhaForm = request.getParameter("senha");
         String acao = request.getParameter("action");
 
-        boolean autenticado = false;
+        String mensagem = "";
+
+        boolean valid = false;
         HttpSession session = request.getSession();
 
         //Chamar método que valida login depois de validar valores do request
+
         if (acao != null  && !acao.isEmpty()) {
 
             switch (acao){
@@ -49,71 +53,53 @@ public class LoginController extends HttpServlet {
                         PessoaModel oPessoaModel = new PessoaModel();
                         PessoaBLL oPessoaBLL = new PessoaBLL();
 
-                        oPessoaBLL = oPessoaBLL;
-
-                        autenticado = isLoginValid(emailForm, senhaForm);
+                        oPessoaModel = oPessoaBLL.ObterLogin(emailForm,senhaForm);
 
 
-                        if (autenticado) {
+                        if (oPessoaModel.getApiId() != null) {
 
                             session.setAttribute("APID", oPessoaModel.getApiId());
                             session.setMaxInactiveInterval(5);
-                            response.sendRedirect("logado.jsp");
 
                             String API = (String) session.getAttribute("APID");
 
+                            mensagem = "Usuário Logado";
+                            valid = true;
+
+
                         }else{
-                            response.setContentType("text/html");
-                            PrintWriter out = response.getWriter();
-                            out.println("Falha na autenticação! Verifique seu usuário e senha e tente novamente!");
+                            mensagem = "Falha na autenticação! Verifique seu usuário e senha e tente novamente!";
                         }
 
                     }else{
-                        response.setContentType("text/html");
-                        PrintWriter out = response.getWriter();
-                    out.println("Dados devem ser preenchidos!");
+
+                    mensagem = "Dados devem ser preenchidos!";
+
                 }
                     break;
                 }
 
                 case "logoff":{
-
                     session.invalidate();
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    out.println("Você foi deslogado!");
+                    mensagem = "Você foi deslogado!";
+                    valid = true;
 
                     break;
                 }
             }
         }else{
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("falta açao!");
+            valid = false;
+            mensagem = "falta açao!";
         }
 
-    }
+        List<Object> obj = new ArrayList<>();
+        obj.add(mensagem);
+        obj.add(valid);
 
-    public boolean isLoginValid(String usuario, String senha) {
-
-        boolean autenticaco = false;
-
-        //validar se usuario e senha existem na base de pessoas
-        PessoaModel oPessoa = new PessoaModel(
-                1,
-                "Henrique",
-                "Martins de Souza",
-                "19/11/1993",
-                "martins_henrique@uninove.edu.br",
-                "521197",
-                "AHXYZ",
-                true);
-
-        if(usuario.equals(oPessoa.getEmail()) && senha.equals(oPessoa.getSenha())){
-            autenticaco = true;
-        }
-
-        return autenticaco;
+        String json = new Gson().toJson(obj);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 
 

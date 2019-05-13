@@ -109,13 +109,23 @@ public class PessoaBLL {
 
     public String ObterAPIID(PessoaModel oPessoaModel){
 
-        String API_ID = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
+        oPessoaModel = (PessoaModel) oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
+
+        String API_ID = oPessoaModel.getApiId();
 
         if(!API_ID.isEmpty() && !API_ID.equals(null)){
             return API_ID;
         }
 
         return null;
+    }
+
+    public PessoaModel ObterLogin (String login, String senha){
+        if(login != null & senha != null){
+            return (PessoaModel) oDaoPessoa.get(login,senha);
+        } else {
+            return null;
+        }
     }
 
 }
