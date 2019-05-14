@@ -54,13 +54,14 @@ public class PessoaController extends HttpServlet {
         PessoaBLL pessoaBLL = new PessoaBLL();
         List<Object> obj = new ArrayList<>();
         String mensagem = "";
-
+        boolean valid = false;
         if(action != null) {
             switch (action) {
 
                 case "create": {
                     if (pessoaBLL.save(pessoaModel)) {
                         mensagem = "registro inserido com sucesso!";
+                        valid = true;
                     } else {
                         mensagem = "Erro ao inserir dados";
                     }
@@ -72,6 +73,7 @@ public class PessoaController extends HttpServlet {
 
                     if (pessoaBLL.update(pessoaModel)) {
                         mensagem = "Alteração feita com sucesso!";
+                        valid = true;
                     } else {
                         mensagem = "Erro ao alterar dados";
                     }
@@ -81,6 +83,7 @@ public class PessoaController extends HttpServlet {
 
                 case "listar": {
                     List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
+                    valid = true;
                     mensagem = "Listagem de todos os usuarios";
                     obj.add(mensagem);
                     obj.add(lstPessoa);
@@ -90,6 +93,7 @@ public class PessoaController extends HttpServlet {
                 case "obterPorID": {
                     pessoaModel = pessoaBLL.ObterPessoaPorID(id);
                     mensagem = "Registro encontrado com sucesso!";
+                    valid = true;
                     obj.add(mensagem);
                     obj.add(pessoaModel);
                     break;
@@ -101,6 +105,8 @@ public class PessoaController extends HttpServlet {
             mensagem = "Não especificado parâmetro de ação";
         }
 
+        obj.add(pessoaModel);
+        obj.add(valid);
         Type listOfLeituraObject = new TypeToken<Object>(){}.getType();
 
         String json = new Gson().toJson(obj,listOfLeituraObject);
