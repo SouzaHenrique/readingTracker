@@ -56,7 +56,7 @@ public class LoginController extends HttpServlet {
                         oPessoaModel = oPessoaBLL.ObterLogin(emailForm,senhaForm);
 
 
-                        if (oPessoaModel.getApiId() != null) {
+                        if (oPessoaModel != null) {
 
                             session.setAttribute("APID", oPessoaModel.getApiId());
                             session.setMaxInactiveInterval(5);
@@ -70,6 +70,8 @@ public class LoginController extends HttpServlet {
                         }else{
                             mensagem = "Falha na autenticação! Verifique seu usuário e senha e tente novamente!";
                         }
+
+
 
                     }else{
 
@@ -101,8 +103,4 @@ public class LoginController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
     }
-
-
-
-
 }

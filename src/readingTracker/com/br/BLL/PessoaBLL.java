@@ -121,11 +121,8 @@ public class PessoaBLL {
     }
 
     public PessoaModel ObterLogin (String login, String senha){
-        if(login != null & senha != null){
-            return (PessoaModel) oDaoPessoa.get(login,senha);
-        } else {
-            return null;
-        }
+        PessoaModel oPessoaModel = new PessoaModel();
+        return oPessoaModel = (PessoaModel) oDaoPessoa.get(login,senha);
     }
 
 }

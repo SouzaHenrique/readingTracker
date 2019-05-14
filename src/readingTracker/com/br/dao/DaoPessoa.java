@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class DaoPessoa implements Dao {
     @Override
-    public boolean Save(Object object){
+    public boolean Save(Object object) {
 
         PessoaModel pessoa = null;
         if (object instanceof PessoaModel) {
@@ -44,7 +44,7 @@ public class DaoPessoa implements Dao {
                 comando = "select max(id) id from pessoa";
                 stmt = con.prepareStatement(comando);
                 ResultSet rs = stmt.executeQuery();
-                if(rs.next()){
+                if (rs.next()) {
                     pessoa.setId(rs.getInt("id"));
                     new DaoTenant().Save(pessoa);
                     con.commit();
@@ -90,7 +90,7 @@ public class DaoPessoa implements Dao {
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
             stmt.setInt(6, status);
-            stmt.setInt(7,pessoa.getId());
+            stmt.setInt(7, pessoa.getId());
             stmt.execute();
             stmt.close();
 
@@ -125,7 +125,7 @@ public class DaoPessoa implements Dao {
         PessoaModel pessoa;
         String comando = "select * from pessoa where id = ?";
 
-        try{
+        try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -142,7 +142,7 @@ public class DaoPessoa implements Dao {
                 );
                 return pessoa;
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
         }
 
@@ -154,7 +154,7 @@ public class DaoPessoa implements Dao {
         List<Object> lstPessoa = new ArrayList<>();
         String comando = "select * from pessoa";
 
-        try{
+        try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -172,7 +172,7 @@ public class DaoPessoa implements Dao {
             }
 
             return lstPessoa;
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
         }
 
@@ -185,7 +185,7 @@ public class DaoPessoa implements Dao {
 
         int valor = status ? 1 : 0;
 
-        try{
+        try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, valor);
             ResultSet rs = stmt.executeQuery();
@@ -204,19 +204,19 @@ public class DaoPessoa implements Dao {
             }
 
             return lstPessoa;
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao teornar lista");
         }
 
         return null;
     }
 
-    public Object get(String apiId){
+    public Object get(String apiId) {
         PessoaModel pessoa;
         String comando = "select * from pessoa where apiId = ?";
 
-        try{
-            PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
+        try {
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setString(1, apiId);
             ResultSet rs = stmt.executeQuery();
 
@@ -234,7 +234,7 @@ public class DaoPessoa implements Dao {
                 return pessoa;
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
             return null;
         }
@@ -242,16 +242,15 @@ public class DaoPessoa implements Dao {
         return null;
     }
 
-    public Object get (String login, String senha){
+    public Object get(String email, String senha) {
         PessoaModel pessoa;
-        String comando = "select * from pessoa where login = ? and senha = ?";
+        String comando = "select * from pessoa where email = ? and senha = ?";
 
-        try{
-            PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
-            stmt.setString(1, login);
-            stmt.setString(1, senha);
+        try {
+            PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 pessoa = new PessoaModel(
                         rs.getInt("id"),
@@ -265,10 +264,8 @@ public class DaoPessoa implements Dao {
                 );
                 return pessoa;
             }
-
-        } catch (SQLException e){
-            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
-            return "";
+        } catch (SQLException ex) {
+            Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, ex + "Erro ao executar busca");
         }
 
         return null;
