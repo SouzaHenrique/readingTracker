@@ -21,9 +21,16 @@ public class PessoaController extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("Servlet Pessoa Funcionando!");
+        PessoaBLL oPessoaBLL = new PessoaBLL();
+        PessoaModel oPessoaModel = new PessoaModel();
+
+        oPessoaModel = oPessoaBLL.ObterPessoaPorID(1);
+
+        String json = new Gson().toJson(oPessoaModel);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+
 
     }
 
