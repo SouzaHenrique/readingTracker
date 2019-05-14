@@ -10,10 +10,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.deploy.net.HttpRequest;
-
+import com.google.gson.Gson;
 import readingTracker.com.br.BLL.PessoaBLL;
-import readingTracker.com.br.model.LeituraModel;
 import readingTracker.com.br.model.PessoaModel;
 
 public class LoginController extends HttpServlet {
@@ -34,82 +32,97 @@ public class LoginController extends HttpServlet {
         String emailForm = request.getParameter("usuario");
         String senhaForm = request.getParameter("senha");
         String acao = request.getParameter("action");
+        String mensagem = "";
+        List<Object> obj = new ArrayList<>();
 
-        boolean autenticado = false;
         HttpSession session = request.getSession();
 
         //Chamar método que valida login depois de validar valores do request
-        if (acao != null  && !acao.isEmpty()) {
 
-            switch (acao){
-                case "login": {
+        if(emailForm != null && senhaForm != null && !emailForm.isEmpty() && !senhaForm.isEmpty()){
 
-                    if(emailForm != null && senhaForm != null && !emailForm.isEmpty() && !senhaForm.isEmpty()){
+            if (acao != null  && !acao.isEmpty()) {
+
+                switch (acao){
+                    case "login": {
+
+                            PessoaModel oPessoaModel = new PessoaModel();
+                            oPessoaModel.setEmail(emailForm);
+                            oPessoaModel.setSenha(senhaForm);
+
+                            boolean autenticado = isLoginValid(oPessoaModel);
+
+                            if (autenticado) {
+
+                                session.setAttribute("APID", oPessoaModel.getApiId());
+                                session.setMaxInactiveInterval(30);
+                                mensagem = "Autenticação OK!";
+                                obj.add(mensagem);
+
+                            }else{
+                                mensagem = "Falha na autenticação!";
+                                obj.add(mensagem);
+                            }
+
+                        break;
+                    }
+
+                    case "login_android":{
 
                         PessoaModel oPessoaModel = new PessoaModel();
-                        PessoaBLL oPessoaBLL = new PessoaBLL();
+                        oPessoaModel.setEmail(emailForm);
+                        oPessoaModel.setSenha(senhaForm);
 
-                        oPessoaBLL = oPessoaBLL;
-
-                        autenticado = isLoginValid(emailForm, senhaForm);
-
+                        boolean autenticado = isLoginValid(oPessoaModel);
 
                         if (autenticado) {
 
-                            session.setAttribute("APID", oPessoaModel.getApiId());
-                            session.setMaxInactiveInterval(5);
-                            response.sendRedirect("logado.jsp");
-
-                            String API = (String) session.getAttribute("APID");
+                            obj.add(oPessoaModel.getApiId());
 
                         }else{
-                            response.setContentType("text/html");
-                            PrintWriter out = response.getWriter();
-                            out.println("Falha na autenticação! Verifique seu usuário e senha e tente novamente!");
+                            mensagem = "Falha na autenticação!";
+                            obj.add(mensagem);
                         }
 
-                    }else{
-                        response.setContentType("text/html");
-                        PrintWriter out = response.getWriter();
-                    out.println("Dados devem ser preenchidos!");
-                }
-                    break;
-                }
+                        break;
+                    }
 
-                case "logoff":{
 
-                    session.invalidate();
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    out.println("Você foi deslogado!");
+                    case "logoff":{
 
-                    break;
+                        session.invalidate();
+
+                        mensagem = "INVALIDATE_SESSION";
+                        obj.add(mensagem);
+                        break;
+                    }
                 }
+            }else{
+                mensagem = "Falta ação (ações disponíveis: login ou logoff) ";
+                obj.add(mensagem);
             }
+
         }else{
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("falta açao!");
+            mensagem = "Dados devem login devem ser preenchidos!";
+            obj.add(mensagem);
         }
+
+        String json = new Gson().toJson(obj);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
     }
 
-    public boolean isLoginValid(String usuario, String senha) {
+    private boolean isLoginValid(PessoaModel oPessoaModel) {
 
+        PessoaBLL oPessoaBLL = new PessoaBLL();
         boolean autenticaco = false;
 
         //validar se usuario e senha existem na base de pessoas
-        PessoaModel oPessoa = new PessoaModel(
-                1,
-                "Henrique",
-                "Martins de Souza",
-                "19/11/1993",
-                "martins_henrique@uninove.edu.br",
-                "521197",
-                "AHXYZ",
-                true);
+        oPessoaModel.setApiId(oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel));
 
-        if(usuario.equals(oPessoa.getEmail()) && senha.equals(oPessoa.getSenha())){
+        if(!oPessoaModel.getApiId().toString().isEmpty()){
             autenticaco = true;
         }
 

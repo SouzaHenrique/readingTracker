@@ -244,26 +244,33 @@ public class DaoPessoa implements Dao {
 
     public String get (String login, String senha){
         PessoaModel pessoa;
-        String comando = "select * from pessoa where login = ? and senha = ?";
+        String comando = "select * from pessoa where email = ? and senha = ?";
 
         try{
             PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setString(1, login);
-            stmt.setString(1, senha);
+            stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                pessoa = new PessoaModel(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("sobrenome"),
-                        rs.getString("dataNascimento"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getString("apiId"),
-                        rs.getBoolean("statusPessoa")
-                );
-                return pessoa.getApiId();
+            if(!rs.next()){
+                return null;
+            }else{
+
+                do{
+                    pessoa = new PessoaModel(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
+                            rs.getString("dataNascimento"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getString("apiId"),
+                            rs.getBoolean("statusPessoa")
+                    );
+                    return pessoa.getApiId();
+
+                }while(rs.next());
+
             }
 
         } catch (SQLException e){
@@ -271,6 +278,5 @@ public class DaoPessoa implements Dao {
             return "";
         }
 
-        return null;
     }
 }
