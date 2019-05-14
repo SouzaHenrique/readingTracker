@@ -252,19 +252,25 @@ public class DaoPessoa implements Dao {
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                pessoa = new PessoaModel(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("sobrenome"),
-                        rs.getString("dataNascimento"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getString("apiId"),
-                        rs.getBoolean("statusPessoa")
-                );
+            if(!rs.next()){
+                return null;
+            }else{
 
-                return pessoa.getApiId();
+                do{
+                    pessoa = new PessoaModel(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("sobrenome"),
+                            rs.getString("dataNascimento"),
+                            rs.getString("email"),
+                            rs.getString("senha"),
+                            rs.getString("apiId"),
+                            rs.getBoolean("statusPessoa")
+                    );
+                    return pessoa.getApiId();
+
+                }while(rs.next());
+
             }
 
         } catch (SQLException e){
@@ -272,6 +278,5 @@ public class DaoPessoa implements Dao {
             return "";
         }
 
-        return null;
     }
 }

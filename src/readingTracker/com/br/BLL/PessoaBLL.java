@@ -111,11 +111,12 @@ public class PessoaBLL {
 
         String API_ID = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
 
-        if(!API_ID.isEmpty() && !API_ID.equals(null)){
+        if(API_ID == null){
+            return "";
+        }else{
             return API_ID;
         }
 
-        return null;
     }
 
 }
