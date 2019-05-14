@@ -46,7 +46,7 @@ public class LeituraController extends HttpServlet{
         try {
             HttpSession session = request.getSession();
             String APID = ((String) session.getAttribute("APID"));
-            oPessoa = oPessoaBll.ObterPessoaPorAPIID(APID));
+            oPessoa = oPessoaBLL.ObterPessoaPorAPIID(APID);
         }catch (Exception ex){
             Logger.getLogger(LeituraController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,31 +62,6 @@ public class LeituraController extends HttpServlet{
             switch (action) {
 
                 case "create": {
-
-                    //Verificar se livro existe na base e insere (caso inexistente)
-                    LivroBLL olivroBLL = new LivroBLL();
-                    LivroModel oLivro = new LivroModel();
-                    String titulo = request.getParameter("title");
-
-                    oLivro = olivroBLL.selecionaLivro(titulo);
-
-                    if (oLivro.getId() == 0) {
-                        oLivro.setTitulo(titulo);
-                        oLivro.setAnoPublicacao(request.getParameter("publishedDate"));
-                        oLivro.setAutor(request.getParameter("authors"));
-                        oLivro.setEditora(request.getParameter("publisher"));
-                        oLivro.setQuantidadePaginas(Integer.parseInt(request.getParameter("pageCount")));
-
-                        olivroBLL.novoLivro(oLivro);
-
-                        //Setando ID do livro (caso não exista na base)
-                        oLivro = olivroBLL.selecionaLivro(titulo);
-                        oLeitura.setId_Livro(oLivro.getId());
-
-                    } else {
-                        //Setando ID do livro (caso exista na base)
-                        oLeitura.setId_Livro(oLivro.getId());
-                    }
 
                     //Inserção de nova leitura
                     if (oLeituraBLL.verificaCampos(oLeitura)) {

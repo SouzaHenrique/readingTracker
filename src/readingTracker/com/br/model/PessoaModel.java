@@ -14,6 +14,7 @@ public class PessoaModel {
     public PessoaModel(){}
 
     public PessoaModel(int id, String nome, String sobrenome, String dataNascimento, String email, String senha, String apiId ,Boolean isAtivo) {
+        this.setId(id);
         this.setNome(nome);
         this.setSobrenome(sobrenome);
         this.setDataNascimento(dataNascimento);

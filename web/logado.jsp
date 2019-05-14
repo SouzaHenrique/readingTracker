@@ -13,7 +13,7 @@
 <body>
 
     <%
-        String usuario = (String) session.getAttribute("logado");
+        String usuario = (String) session.getAttribute("APID");
 
         if(usuario == null){
             response.sendRedirect("index.jsp");

@@ -35,7 +35,6 @@ public class LoginController extends HttpServlet {
         String senhaForm = request.getParameter("senha");
         String acao = request.getParameter("action");
 
-        boolean autenticado = false;
         HttpSession session = request.getSession();
 
         //Chamar método que valida login depois de validar valores do request
@@ -47,20 +46,16 @@ public class LoginController extends HttpServlet {
                     if(emailForm != null && senhaForm != null && !emailForm.isEmpty() && !senhaForm.isEmpty()){
 
                         PessoaModel oPessoaModel = new PessoaModel();
-                        PessoaBLL oPessoaBLL = new PessoaBLL();
+                        oPessoaModel.setEmail(emailForm);
+                        oPessoaModel.setSenha(senhaForm);
 
-                        oPessoaBLL = oPessoaBLL;
+                        boolean autenticado = isLoginValid(oPessoaModel);
 
-                        autenticado = isLoginValid(emailForm, senhaForm);
-
-
-                        if (autenticado) {
+                        if (autenticado && !oPessoaModel.getApiId().equals(null)) {
 
                             session.setAttribute("APID", oPessoaModel.getApiId());
-                            session.setMaxInactiveInterval(5);
+                            session.setMaxInactiveInterval(30);
                             response.sendRedirect("logado.jsp");
-
-                            String API = (String) session.getAttribute("APID");
 
                         }else{
                             response.setContentType("text/html");
@@ -94,22 +89,15 @@ public class LoginController extends HttpServlet {
 
     }
 
-    public boolean isLoginValid(String usuario, String senha) {
+    public boolean isLoginValid(PessoaModel oPessoaModel) {
 
+        PessoaBLL oPessoaBLL = new PessoaBLL();
         boolean autenticaco = false;
 
         //validar se usuario e senha existem na base de pessoas
-        PessoaModel oPessoa = new PessoaModel(
-                1,
-                "Henrique",
-                "Martins de Souza",
-                "19/11/1993",
-                "martins_henrique@uninove.edu.br",
-                "521197",
-                "AHXYZ",
-                true);
+        oPessoaModel.setApiId(oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel));
 
-        if(usuario.equals(oPessoa.getEmail()) && senha.equals(oPessoa.getSenha())){
+        if(!oPessoaModel.getApiId().toString().isEmpty() && !oPessoaModel.getApiId().toString().equals(null)){
             autenticaco = true;
         }
 

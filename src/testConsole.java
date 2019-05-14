@@ -1,7 +1,9 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.factory.ConnectionFactory;
 import readingTracker.com.br.model.LeituraModel;
+import readingTracker.com.br.model.PessoaModel;
 
 import java.lang.reflect.Type;
 import java.sql.Connection;
@@ -12,19 +14,17 @@ public class testConsole {
 
     public static void main(String[] args) {
 
-        /*Type listOfTestObject = new TypeToken<List<TestObject>>(){}.getType();
-        String s = gson.toJson(list, listOfTestObject);
-        List<TestObject> list2 = gson.fromJson(s, listOfTestObject);
+        PessoaModel oPessoaModel = new PessoaModel();
+        PessoaBLL oPessoaBLL = new PessoaBLL();
 
-        Gson gson = new Gson();
+        oPessoaModel.setEmail("hszm20941@outlook.com");
+        oPessoaModel.setSenha("521197");
 
-        List<LeituraModel> lstLeitura =  retListaLeitura();
-        Type listOfLeituraObject = new TypeToken<List<LeituraModel>>(){}.getType();
+        String resultado = oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel);
 
-        String myJson = gson.toJson(lstLeitura,listOfLeituraObject);
+        System.out.println(resultado);
 
 
-        System.out.println(myJson);*/
 
     }
 

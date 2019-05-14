@@ -46,12 +46,12 @@ public class PessoaBLL {
         }
 
         // Valida email - regex
-        final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        /*final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", Pattern.CASE_INSENSITIVE);
 
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(oPessoaModel.getEmail());
         if (!matcher.find()) {
             return false;
-        }
+        } */
 
          /*Se for um objeto valido e não tiver ID
          Trata-se de uma inserção então não geramos API ID nem mexemos no status
@@ -107,7 +107,7 @@ public class PessoaBLL {
 
     }
 
-    public String ObterAPIID(PessoaModel oPessoaModel){
+    public String ObterPessoaPorEmailSenha(PessoaModel oPessoaModel){
 
         String API_ID = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
 

@@ -244,12 +244,12 @@ public class DaoPessoa implements Dao {
 
     public String get (String login, String senha){
         PessoaModel pessoa;
-        String comando = "select * from pessoa where login = ? and senha = ?";
+        String comando = "select * from pessoa where email = ? and senha = ?";
 
         try{
             PreparedStatement stmt =  new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setString(1, login);
-            stmt.setString(1, senha);
+            stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -263,6 +263,7 @@ public class DaoPessoa implements Dao {
                         rs.getString("apiId"),
                         rs.getBoolean("statusPessoa")
                 );
+
                 return pessoa.getApiId();
             }
 
