@@ -54,7 +54,7 @@ public class LoginController extends HttpServlet {
 
                             if (autenticado) {
 
-                                session.setAttribute("APID", oPessoaModel.getApiId());
+                                session.setAttribute("ID", oPessoaModel.getId());
                                 session.setMaxInactiveInterval(30);
                                 mensagem = "Autenticação OK!";
                                 obj.add(mensagem);
@@ -117,12 +117,14 @@ public class LoginController extends HttpServlet {
     private boolean isLoginValid(PessoaModel oPessoaModel) {
 
         PessoaBLL oPessoaBLL = new PessoaBLL();
-        boolean autenticaco = false;
+        boolean autenticaco;
 
         //validar se usuario e senha existem na base de pessoas
         oPessoaModel.setId(oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel));
 
-        if(!oPessoaModel.getApiId().toString().isEmpty()){
+        if(oPessoaModel.getId() == 0){
+            autenticaco = false;
+        }else{
             autenticaco = true;
         }
 
