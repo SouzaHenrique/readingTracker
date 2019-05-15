@@ -47,7 +47,6 @@ public class PessoaController extends HttpServlet {
         String senha = request.getParameter("senha");
         String action = request.getParameter("action");
 
-        PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
         PessoaBLL pessoaBLL = new PessoaBLL();
         List<Object> obj = new ArrayList<>();
         String mensagem = "";
@@ -56,6 +55,9 @@ public class PessoaController extends HttpServlet {
             switch (action) {
 
                 case "create": {
+
+                    PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
+
                     if (pessoaBLL.save(pessoaModel)) {
                         mensagem = "registro inserido com sucesso!";
                     } else {
@@ -67,8 +69,12 @@ public class PessoaController extends HttpServlet {
 
                 case "edit": {
 
+                    PessoaModel pessoaModel = new PessoaModel(id,nome,sobrenome,dataNascimento,email,senha,"",false);
+
                     if (pessoaBLL.update(pessoaModel)) {
+
                         mensagem = "Alteração feita com sucesso!";
+                        obj.add(oPessoaBLL.ObterPessoaPorID(id));
                     } else {
                         mensagem = "Erro ao alterar dados";
                     }
@@ -85,6 +91,9 @@ public class PessoaController extends HttpServlet {
                 }
 
                 case "obterPorID": {
+
+                    PessoaModel pessoaModel;
+
                     pessoaModel = pessoaBLL.ObterPessoaPorID(id);
                     mensagem = "Registro encontrado com sucesso!";
                     obj.add(mensagem);
@@ -92,11 +101,14 @@ public class PessoaController extends HttpServlet {
                     break;
                 }
 
-                case "obterAPIID":{
-                    String API_ID = pessoaBLL.ObterPessoaPorEmailSenha(pessoaModel);
+                case "obterId":{
+
+                    PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
+
+                    int Id = pessoaBLL.ObterPessoaPorEmailSenha(pessoaModel);
                     mensagem = "Registro encontrado com sucesso!";
                     obj.add(mensagem);
-                    obj.add(API_ID);
+                    obj.add(Id);
                     break;
                 }
 

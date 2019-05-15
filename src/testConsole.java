@@ -20,9 +20,9 @@ public class testConsole {
         oPessoaModel.setEmail("hszm20941@outlook.com");
         oPessoaModel.setSenha("521197");
 
-        String resultado = oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel);
+       // String resultado = oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel);
 
-        System.out.println(resultado);
+        //System.out.println(resultado);
 
 
 

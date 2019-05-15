@@ -78,7 +78,7 @@ public class DaoPessoa implements Dao {
             return false;
         }
 
-        int status = pessoa.getAtivo() == null ? 1 : 0;
+        //int status = pessoa.getAtivo() == null ? 1 : 0;
         String comando = "update pessoa set nome = ? ,sobrenome = ? ,dataNascimento = ?,email = ?,senha = ?, statusPessoa = ? where id = ?";
 
         try {
@@ -89,7 +89,7 @@ public class DaoPessoa implements Dao {
             stmt.setString(3, pessoa.getDataNascimento());
             stmt.setString(4, pessoa.getEmail());
             stmt.setString(5, pessoa.getSenha());
-            stmt.setInt(6, status);
+            stmt.setInt(6, 1);
             stmt.setInt(7,pessoa.getId());
             stmt.execute();
             stmt.close();
@@ -242,7 +242,7 @@ public class DaoPessoa implements Dao {
         return null;
     }
 
-    public String get (String login, String senha){
+    public int get (String login, String senha){
         PessoaModel pessoa;
         String comando = "select * from pessoa where email = ? and senha = ?";
 
@@ -253,7 +253,7 @@ public class DaoPessoa implements Dao {
             ResultSet rs = stmt.executeQuery();
 
             if(!rs.next()){
-                return null;
+                return 0;
             }else{
 
                 do{
@@ -267,7 +267,7 @@ public class DaoPessoa implements Dao {
                             rs.getString("apiId"),
                             rs.getBoolean("statusPessoa")
                     );
-                    return pessoa.getApiId();
+                    return pessoa.getId();
 
                 }while(rs.next());
 
@@ -275,7 +275,7 @@ public class DaoPessoa implements Dao {
 
         } catch (SQLException e){
             Logger.getLogger(DaoPessoa.class.getName()).log(Level.SEVERE, null, e + "Erro ao executar busca por apiId");
-            return "";
+            return 0;
         }
 
     }

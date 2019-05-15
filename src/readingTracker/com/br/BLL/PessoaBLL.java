@@ -107,14 +107,14 @@ public class PessoaBLL {
 
     }
 
-    public String ObterPessoaPorEmailSenha(PessoaModel oPessoaModel){
+    public int ObterPessoaPorEmailSenha(PessoaModel oPessoaModel){
 
-        String API_ID = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
+        int Id = oDaoPessoa.get(oPessoaModel.getEmail(), oPessoaModel.getSenha());
 
-        if(API_ID == null){
-            return "";
+        if(Id == 0){
+            return 0;
         }else{
-            return API_ID;
+            return Id;
         }
 
     }

@@ -120,7 +120,7 @@ public class LoginController extends HttpServlet {
         boolean autenticaco = false;
 
         //validar se usuario e senha existem na base de pessoas
-        oPessoaModel.setApiId(oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel));
+        oPessoaModel.setId(oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel));
 
         if(!oPessoaModel.getApiId().toString().isEmpty()){
             autenticaco = true;
