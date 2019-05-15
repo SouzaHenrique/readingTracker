@@ -57,6 +57,7 @@ public class LoginController extends HttpServlet {
                                 session.setAttribute("ID", oPessoaModel.getId());
                                 session.setMaxInactiveInterval(30);
                                 mensagem = "Autenticação OK!";
+                                obj.add(oPessoaModel.getId());
                                 obj.add(mensagem);
 
                             }else{
