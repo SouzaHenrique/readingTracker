@@ -1,8 +1,10 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import readingTracker.com.br.BLL.LivroBLL;
 import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.factory.ConnectionFactory;
 import readingTracker.com.br.model.LeituraModel;
+import readingTracker.com.br.model.LivroModel;
 import readingTracker.com.br.model.PessoaModel;
 
 import java.lang.reflect.Type;
@@ -14,15 +16,20 @@ public class testConsole {
 
     public static void main(String[] args) {
 
-        PessoaModel oPessoaModel = new PessoaModel();
-        PessoaBLL oPessoaBLL = new PessoaBLL();
+      LivroModel oLivroModel = new LivroModel();
+      LivroBLL oLivroBLL = new LivroBLL();
 
-        oPessoaModel.setEmail("hszm20941@outlook.com");
-        oPessoaModel.setSenha("521197");
+      oLivroModel.setTitulo("Harry Potter");
 
-       // String resultado = oPessoaBLL.ObterPessoaPorEmailSenha(oPessoaModel);
+      List<LivroModel> lstLivros = oLivroBLL.buscaLivros(oLivroModel.getTitulo());
 
-        //System.out.println(resultado);
+      if(!lstLivros.isEmpty()){
+
+          for(LivroModel item : lstLivros){
+              System.out.println(item.getTitulo());
+          }
+
+      }
 
 
 

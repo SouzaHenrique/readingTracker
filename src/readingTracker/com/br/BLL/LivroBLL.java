@@ -12,9 +12,9 @@ public class LivroBLL {
 
     private DaoLivro daoLivro = new DaoLivro();
 
-    public boolean verificaCampos(String Titulo) {
+    public boolean verificaCampos(LivroModel oLivro) {
 
-        if (Titulo.equals(null)) {
+        if(oLivro.getTitulo().isEmpty()){
 
             return false;
         }
@@ -24,22 +24,24 @@ public class LivroBLL {
 
     public boolean novoLivro(LivroModel oLivro) {
         try {
-            if (daoLivro.Save(oLivro)) {
-                return true;
+            if (verificaCampos(oLivro)) {
+                return daoLivro.Save(oLivro);
             }
         } catch (Exception ex) {
             Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
         return false;
     }
 
     public boolean editarLivro(LivroModel oLivro) {
         try {
-            if (daoLivro.Update(oLivro)) {
-                return true;
+            if (verificaCampos(oLivro)) {
+                return daoLivro.Update(oLivro);
             }
         } catch (Exception ex) {
             Logger.getLogger(LivroBLL.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
         return false;
     }

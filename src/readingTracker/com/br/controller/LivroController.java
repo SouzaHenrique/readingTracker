@@ -31,42 +31,46 @@ public class LivroController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        LivroModel oLivro = new LivroModel();
+        LivroModel oLivro;
         LivroBLL oLivroBLL = new LivroBLL();
 
-        String msg = "";
+        String mensagem = "";
+        int quantidadePaginas;
+        int quantidadeLeituras;
 
+        String titulo = request.getParameter("titulo");
+        String autor = request.getParameter("autor");
+        String anoPublicacao = request.getParameter("anoPublicacao");
+        String editora = request.getParameter("editora");
         String action = request.getParameter("action");
 
-        //TODO - Luiz: Preencher LivroModel com parâmetros esperados
+        if(tryParseInt(request.getParameter("quantidadePaginas"))){
+            quantidadePaginas = Integer.parseInt(request.getParameter("quantidadePaginas"));
+        }else{
+            quantidadePaginas = 0;
+        }
 
-        oLivro.setTitulo(request.getParameter("Titulo"));
-        oLivro.setAutor(request.getParameter("Autor"));
-        oLivro.setAnoPublicacao(request.getParameter("AnoPublicacao"));
-        oLivro.setEditora(request.getParameter("Editora"));
-        oLivro.setQuantidadePaginas(Integer.parseInt(request.getParameter("QuantidadePaginas")));
-        oLivro.setQuantidadeLeituras(Long.parseLong(request.getParameter("QuantidadeLeituras")));
-
+        if(tryParseInt(request.getParameter("quantidadeLeituras"))){
+            quantidadeLeituras = Integer.parseInt(request.getParameter("quantidadeLeituras"));
+        }else{
+            quantidadeLeituras = 0;
+        }
 
         if (action != null  && !action.isEmpty()) {
             switch (action) {
 
             case "create":{
 
-                //TODO - Luiz: Chamar método da BLL para inserir registro de um Livro
+                oLivro = new LivroModel(0,titulo,autor,anoPublicacao,editora,quantidadePaginas,quantidadeLeituras);
 
-                if(oLivroBLL.verificaCampos(oLivro.getTitulo())){
-                    if (oLivroBLL.novoLivro(oLivro)) {
-                        msg = "Livro cadastrado com sucesso!";
-                    } else {
-                        msg = "Não foi possivel cadastrar este livro!";
-                    }
-                } else {
-                    msg = "Título inválido ou nulo!";
+                if(oLivroBLL.novoLivro(oLivro)){
+                    mensagem ="Livro cadastrado!";
+                }
+                else{
+                    mensagem = "Erro ao cadastrar o livro!";
                 }
 
-
-                String json = new Gson().toJson(msg);
+                String json = new Gson().toJson(mensagem);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(json);
@@ -75,20 +79,9 @@ public class LivroController extends HttpServlet {
 
             case "edit":{
 
-                //TODO - Luiz: Chamar método da BLL para alterar registro de um Livro
+                mensagem = "Não são permitidas nesta versão da ReadingTracker API alterações dos dados dos livros!";
 
-                if(oLivroBLL.verificaCampos(oLivro.getTitulo())){
-                    if (oLivroBLL.editarLivro(oLivro)) {
-                        msg = "Livro editado com sucesso!";
-                    } else {
-                        msg = "Não foi possivel editar este livro!";
-                    }
-                } else {
-                    msg = "Título inválido ou nulo!";
-                }
-
-
-                String json = new Gson().toJson(msg);
+                String json = new Gson().toJson(mensagem);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(json);
@@ -97,13 +90,12 @@ public class LivroController extends HttpServlet {
 
             case "listar":{
 
-                // TODO - Luiz : Chamar método da BLL para obter uma lista de livros
-                List<LivroModel> lstLivro = new ArrayList<LivroModel>();
-                lstLivro = oLivroBLL.buscaLivros(oLivro.getTitulo());
+                oLivro = new LivroModel(0,titulo,autor,anoPublicacao,editora,quantidadePaginas,quantidadeLeituras);
 
-                Gson gson = new Gson();
+                List<LivroModel> lstLivro = oLivroBLL.buscaLivros(oLivro.getTitulo());
+
                 Type listOfLivroObject = new TypeToken<List<LivroModel>>(){}.getType();
-                String myJson = gson.toJson(lstLivro,listOfLivroObject);
+                String myJson = new Gson().toJson(lstLivro,listOfLivroObject);
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("utf-8");
@@ -119,7 +111,7 @@ public class LivroController extends HttpServlet {
 
             default:{
 
-                msg = "Ação invalida!";
+                mensagem = "Ação invalida!";
                 response.setContentType("text/html");
                 PrintWriter out = response.getWriter();
                 out.println("falta açao!");
@@ -136,6 +128,17 @@ public class LivroController extends HttpServlet {
         }
 
     }
+
+
+    boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
 }
 

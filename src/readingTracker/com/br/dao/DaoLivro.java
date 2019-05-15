@@ -22,7 +22,7 @@ public class DaoLivro implements Dao {
             return false;
         }
 
-        String comando = "INSERT INTO Livro(titulo, autor, anoPublicacao, editora, quantidadePaginas, quantidadeLeituras) values (?,?,?,?,?,?)";
+        String comando = "INSERT INTO Livro(titulo, autor, anoPublicacao, editora, quantidadePaginas, quantidadeLeitura) values (?,?,?,?,?,?)";
 
         if (PrepareStatement(oLivro, comando)) return true;
 
@@ -39,7 +39,7 @@ public class DaoLivro implements Dao {
             return false;
         }
 
-        String comando = "UPDATE livro SET titulo = ?, autor = ? , anoPublicacao = ?, editora = ?, quantidadePaginas = ?, quantidadeLeituras = ? ";
+        String comando = "UPDATE livro SET titulo = ?, autor = ? , anoPublicacao = ?, editora = ?, quantidadePaginas = ?, quantidadeLeitura = ? ";
 
         if (PrepareStatement(oLivro, comando)) return true;
         return false;
@@ -53,7 +53,7 @@ public class DaoLivro implements Dao {
             stmt.setString(3, oLivro.getAnoPublicacao());
             stmt.setString(4, oLivro.getEditora());
             stmt.setInt(5, oLivro.getQuantidadePaginas());
-            stmt.setLong(6, oLivro.getQuantidadeLeituras());
+            stmt.setLong(6, oLivro.getQuantidadeLeitura());
             stmt.execute();
             return true;
 
@@ -101,7 +101,7 @@ public class DaoLivro implements Dao {
                 rs.getString("anoPublicacao");
                 rs.getString("editora");
                 rs.getInt("quantidadePaginas");
-                rs.getLong("quantidadeLeituras");
+                rs.getLong("quantidadeLeitura");
             }
 
             return oLivro;
@@ -131,7 +131,7 @@ public class DaoLivro implements Dao {
                         rs.getString("anoPublicacao"),
                         rs.getString("editora"),
                         rs.getInt("quantidadePaginas"),
-                        rs.getLong("quantidadeLeituras"));
+                        rs.getLong("quantidadeLeitura"));
                 lstLivro.add(livro);
             }
 
@@ -165,7 +165,7 @@ public class DaoLivro implements Dao {
                             rs.getString("anoPublicacao"),
                             rs.getString("editora"),
                             rs.getInt("quantidadePaginas"),
-                            rs.getLong("quantidadeLeituras"));
+                            rs.getLong("quantidadeLeitura"));
                     lstLivro.add(livro);
 
                 }
@@ -200,7 +200,7 @@ public class DaoLivro implements Dao {
                 rs.getString("anoPublicacao");
                 rs.getString("editora");
                 rs.getInt("quantidadePaginas");
-                rs.getLong("quantidadeLeituras");
+                rs.getLong("quantidadeLeitura");
             }
 
             return oLivro;

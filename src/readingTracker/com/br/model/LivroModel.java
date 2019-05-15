@@ -1,7 +1,5 @@
 package readingTracker.com.br.model;
 
-import java.util.Date;
-
 public class LivroModel {
 
     private int Id;
@@ -10,19 +8,19 @@ public class LivroModel {
     private String AnoPublicacao;
     private String Editora;
     private int QuantidadePaginas;
-    private long QuantidadeLeituras;
+    private long QuantidadeLeitura;
 
     public LivroModel() {
     }
 
-    public LivroModel(int id, String titulo, String autor, String anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeituras) {
+    public LivroModel(int id, String titulo, String autor, String anoPublicacao, String editora, int quantidadePaginas, long quantidadeLeitura) {
         this.setId(id);
         this.setTitulo(titulo);
         this.setAutor(autor);
         this.setAnoPublicacao(anoPublicacao);
         this.setEditora(editora);
         this.setQuantidadePaginas(quantidadePaginas);
-        this.setQuantidadeLeituras(quantidadeLeituras);
+        this.setQuantidadeLeitura(quantidadeLeitura);
     }
 
     public int getId() { return Id; }
@@ -65,12 +63,12 @@ public class LivroModel {
         QuantidadePaginas = quantidadePaginas;
     }
 
-    public long getQuantidadeLeituras() {
-        return QuantidadeLeituras;
+    public long getQuantidadeLeitura() {
+        return QuantidadeLeitura;
     }
 
-    public void setQuantidadeLeituras(long quantidadeLeituras) {
-        QuantidadeLeituras = quantidadeLeituras;
+    public void setQuantidadeLeitura(long quantidadeLeitura) {
+        QuantidadeLeitura = quantidadeLeitura;
     }
 
 
