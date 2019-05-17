@@ -31,18 +31,14 @@ public class LeituraController extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Variaveis uteis
         LeituraModel oLeitura = new LeituraModel();
         LeituraBLL oLeituraBLL = new LeituraBLL();
-        PessoaBLL oPessoaBLL= new PessoaBLL();
-        PessoaModel oPessoa = new PessoaModel();
         String msg = "";
-
-        //Obter ação do usuario
-        String action = request.getParameter("action");
-
+        Gson gson = new Gson();
+        List<Object> obj = new ArrayList<>();
 
         //Busca dados do usuario pelo APID
+        /* Desativado nesta versao da API por Henrique Souza.
         try {
             HttpSession session = request.getSession();
             String APID = ((String) session.getAttribute("APID"));
@@ -50,11 +46,49 @@ public class LeituraController extends HttpServlet{
         }catch (Exception ex){
             Logger.getLogger(LeituraController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
 
-        //Dados da leitura
-        oLeitura.setStatusLeitura(Integer.parseInt(request.getParameter("statusLeitura")));
-        oLeitura.setPaginasLidas(Integer.parseInt(request.getParameter("paginasLidas")));
-        oLeitura.setDataterminoPlanejado(request.getParameter("DataterminoPlanejado"));
+
+        //Obtem valores do request
+        String action = request.getParameter("action");
+        String idLeitura = request.getParameter("id");
+        String idLeitor =  request.getParameter("idLeitor");
+        String idLivro = request.getParameter("idLivro");
+        String statusLeitura = request.getParameter("statusLeitura");
+        String paginasLidas = request.getParameter("paginasLidas");
+        String dataTerminoPlanejado = request.getParameter("dataTerminoPlanejado");
+
+        //Obtem dados e popula objeto oLeituraModel
+        if(tryParseInt(idLeitura)){
+            oLeitura.setId(Integer.parseInt(idLeitura));
+        }else{
+            oLeitura.setId(0);
+        }
+
+        if(tryParseInt(idLeitor)){
+            oLeitura.setId_Leitor(Integer.parseInt(idLeitor));
+        }else{
+            oLeitura.setId_Leitor(0);
+        }
+
+        if(tryParseInt(idLivro)){
+            oLeitura.setId_Livro(Integer.parseInt(idLivro));
+        }
+
+        if(tryParseInt(statusLeitura)){
+            oLeitura.setStatusLeitura(Integer.parseInt(statusLeitura));
+        }else{
+            oLeitura.setStatusLeitura(0);
+        }
+
+        if(tryParseInt(paginasLidas)){
+            oLeitura.setPaginasLidas(Integer.parseInt(paginasLidas));
+        }else{
+            oLeitura.setPaginasLidas(0);
+        }
+
+        oLeitura.setDataterminoPlanejado(dataTerminoPlanejado);
+
 
 
         //CRUD de leitura de acordo com campo action informado
@@ -62,6 +96,8 @@ public class LeituraController extends HttpServlet{
             switch (action) {
 
                 case "create": {
+
+                    /* Desativado nesta versão da API por Henrique Souza.
 
                     //Verificar se livro existe na base e insere (caso inexistente)
                     LivroBLL olivroBLL = new LivroBLL();
@@ -86,91 +122,86 @@ public class LeituraController extends HttpServlet{
                     } else {
                         //Setando ID do livro (caso exista na base)
                         oLeitura.setId_Livro(oLivro.getId());
-                    }
+                    }*/
 
                     //Inserção de nova leitura
-                    if (oLeituraBLL.verificaCampos(oLeitura)) {
-                        if (oLeituraBLL.novaLeitura(oLeitura)) {
-                            msg = "Leitura cadastrada com sucesso!";
-                        } else {
-                            msg = "Não foi possivel cadastrar esta leitura!";
-                        }
+                    if (oLeituraBLL.novaLeitura(oLeitura)) {
+                        msg = "Leitura cadastrada com sucesso!";
                     } else {
-                        msg = "Dados invalidos ou nulo!";
+                        msg = "Não foi possivel cadastrar esta leitura!";
                     }
 
-                    //Mensgaem de retorno json
-                    String json = new Gson().toJson(msg);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
+                    obj.add(msg);
                     break;
 
                 }
 
                 case "edit": {
 
+                    /* Desativado nesta versão da API por Henrique Souza.
                     //Caso edição de leitura: o ID do livro e Leitura é retornado da base e invisivel no dashboard
                     oLeitura.setId_Livro(Integer.parseInt(request.getParameter("id_Livro")));
-                    oLeitura.setId(Integer.parseInt(request.getParameter("id_Leitura")));
-
-                    if (oLeituraBLL.verificaCampos(oLeitura)) {
-                        if (oLeituraBLL.editarLeitura(oLeitura)) {
-                            msg = "Leitura editada com sucesso!";
-                        } else {
-                            msg = "Não foi possivel editar esta leitura!";
-                        }
+                    oLeitura.setId(Integer.parseInt(request.getParameter("id_Leitura"))); */
+                    if (oLeituraBLL.editarLeitura(oLeitura)) {
+                        msg = "Leitura editada com sucesso!";
                     } else {
-                        msg = "Dados invalidos ou nulo!";
+                        msg = "Não foi possivel editar esta leitura!";
                     }
 
-                    //Mensgaem de retorno json
-                    String json = new Gson().toJson(msg);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write(json);
+                    obj.add(msg);
                     break;
                 }
 
                 case "listar": {
-                    List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
+                    List<LeituraModel> lstLeitura;
 
                     //Consulta de Leituras por ID do usuario
                     lstLeitura = oLeituraBLL.listarLeituras(oLeitura.getId_Leitor());
-
-                    //Conversão da Lista para Json
-                    Gson gson = new Gson();
 
                     Type listOfLeituraObject = new TypeToken<List<LeituraModel>>(){}.getType();
 
                     String myJson = gson.toJson(lstLeitura,listOfLeituraObject);
 
-                    //Retorno de lista Json
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("utf-8");
-                    response.getWriter().write(myJson);
+                    obj.add(myJson);
 
                     break;
                 }
 
-                case "obter": {
-                    //TODO o que fazer em case obter?
+                case "obterPorId": {
+
+                    //Obtem um objeto leitura
+                    oLeitura = oLeituraBLL.obterLeitura(oLeitura.getId());
+                    obj.add(oLeitura);
+
                     break;
                 }
+
                 default:{
                     msg = "Ação invalida!";
-                    response.setContentType("text/html");
-                    PrintWriter out = response.getWriter();
-                    out.println("falta açao!");
+                    obj.add(msg);
                 }
 
             }
         }else{
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("falta açao!");
+            msg = "falta açao!";
+            obj.add(msg);
         }
 
+        //Serializa retorno e o envia
+        String myJson = gson.toJson(obj);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(myJson);
+
+    }
+
+    private boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

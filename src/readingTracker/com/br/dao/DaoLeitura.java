@@ -24,7 +24,6 @@ public class DaoLeitura implements Dao {
 
         String comando = "insert into leitura(id_Leitor, id_Livro, statusLeitura, paginasLidas, dataterminoPlanejado) values (?,?,?,?,?)";
 
-
         try {
             PreparedStatement stmt = new ConnectionFactory().getConnection().prepareStatement(comando);
             stmt.setInt(1, oLeitura.getId_Leitor());
@@ -145,8 +144,10 @@ public class DaoLeitura implements Dao {
         return null;
     }
 
-    public List<LeituraModel> getListById(int id){
-        List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
+    public List<Object> getListById(int id){
+
+        List<Object> lstLeitura = new ArrayList<Object>();
+
         String comando = "select * from Leitura where id_leitor = ?";
 
         try{
@@ -162,7 +163,9 @@ public class DaoLeitura implements Dao {
                         rs.getInt("paginasLidas"),
                         rs.getString("dataterminoPlanejado")
                 );
+
                 lstLeitura.add(oLeitura);
+
             }
 
             return lstLeitura;

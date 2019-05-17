@@ -59,7 +59,7 @@ public class PessoaController extends HttpServlet {
                     PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
 
                     if (pessoaBLL.save(pessoaModel)) {
-                        mensagem = "registro inserido com sucesso!";
+                        mensagem = "registro inserido com sucesso!";                        
                     } else {
                         mensagem = "Erro ao inserir dados";
                     }
