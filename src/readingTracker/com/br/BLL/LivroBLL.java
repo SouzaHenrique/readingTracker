@@ -46,11 +46,15 @@ public class LivroBLL {
         return false;
     }
 
-    public List<LivroModel> buscaLivros(String Titulo) {
+    public List<LivroModel> buscaLivros() {
 
         List<LivroModel> lstLivro = new ArrayList<>();
-        lstLivro = daoLivro.getListByTitulo(Titulo);
+        List<Object> lstObj = daoLivro.get();
 
+        for(Object obj : lstObj){
+            lstLivro.add((LivroModel)obj);
+        }
+/*
         if (lstLivro.isEmpty()) {
 
             BooksBLL books = BooksBLL.getInstance();
@@ -58,7 +62,7 @@ public class LivroBLL {
 
             return lstLivro;
         }
-
+*/
         return lstLivro;
     }
 

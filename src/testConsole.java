@@ -15,7 +15,7 @@ import java.util.List;
 public class testConsole {
 
     public static void main(String[] args) {
-
+/*
       LivroModel oLivroModel = new LivroModel();
       LivroBLL oLivroBLL = new LivroBLL();
 
@@ -30,7 +30,7 @@ public class testConsole {
           }
 
       }
-
+*/
 
 
     }
