@@ -92,7 +92,7 @@ public class LivroController extends HttpServlet {
 
                 oLivro = new LivroModel(0,titulo,autor,anoPublicacao,editora,quantidadePaginas,quantidadeLeituras);
 
-                List<LivroModel> lstLivro = oLivroBLL.buscaLivros(oLivro.getTitulo());
+                List<LivroModel> lstLivro = oLivroBLL.buscaLivros();
 
                 Type listOfLivroObject = new TypeToken<List<LivroModel>>(){}.getType();
                 String myJson = new Gson().toJson(lstLivro,listOfLivroObject);

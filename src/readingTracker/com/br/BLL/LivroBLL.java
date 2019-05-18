@@ -46,18 +46,20 @@ public class LivroBLL {
         return false;
     }
 
-    public List<LivroModel> buscaLivros(String Titulo) {
+    public List<LivroModel> buscaLivros() {
 
-        List<LivroModel> lstLivro = new ArrayList<>();
-        lstLivro = daoLivro.getListByTitulo(Titulo);
+        List<LivroModel> lstLivro;
 
+        lstLivro =  (List<LivroModel>) (List<?>) daoLivro.get();
+
+        /* Desativado nesta versão da API por Henrique Souza
         if (lstLivro.isEmpty()) {
 
             BooksBLL books = BooksBLL.getInstance();
             lstLivro = books.doGetList(Titulo);
 
             return lstLivro;
-        }
+        }*/
 
         return lstLivro;
     }
