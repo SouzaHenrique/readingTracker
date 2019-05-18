@@ -88,7 +88,7 @@ public class PessoaBLL {
 
     public PessoaModel ObterPessoaPorID(int id) {
 
-        PessoaModel oPessoaModel = new PessoaModel();
+        PessoaModel oPessoaModel;
         return oPessoaModel = (PessoaModel) oDaoPessoa.get(id);
     }
 

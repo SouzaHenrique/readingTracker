@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.PessoaBLL;
 import readingTracker.com.br.model.PessoaModel;
+import readingTracker.com.br.model.requestStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,7 +50,9 @@ public class PessoaController extends HttpServlet {
 
         PessoaBLL pessoaBLL = new PessoaBLL();
         List<Object> obj = new ArrayList<>();
-        String mensagem = "";
+        requestStatus oRequestStatus = new requestStatus();
+        String mensagem;
+
 
         if(action != null) {
             switch (action) {
@@ -59,11 +62,10 @@ public class PessoaController extends HttpServlet {
                     PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
 
                     if (pessoaBLL.save(pessoaModel)) {
-                        mensagem = "registro inserido com sucesso!";                        
-                    } else {
-                        mensagem = "Erro ao inserir dados";
+                        oRequestStatus.setRequestStatus(true);
                     }
-                    obj.add(mensagem);
+
+                    obj.add(oRequestStatus);
                     break;
                 }
 
@@ -72,32 +74,37 @@ public class PessoaController extends HttpServlet {
                     PessoaModel pessoaModel = new PessoaModel(id,nome,sobrenome,dataNascimento,email,senha,"",false);
 
                     if (pessoaBLL.update(pessoaModel)) {
-
-                        mensagem = "Alteração feita com sucesso!";
-                        obj.add(oPessoaBLL.ObterPessoaPorID(id));
-                    } else {
-                        mensagem = "Erro ao alterar dados";
+                        oRequestStatus.setRequestStatus(true);
                     }
-                    obj.add(mensagem);
+                    obj.add(oRequestStatus);
+
                     break;
                 }
 
                 case "listar": {
+
                     List<PessoaModel> lstPessoa = pessoaBLL.ObterPessoas();
-                    mensagem = "Listagem de todos os usuarios";
-                    obj.add(mensagem);
+
+                    if(!lstPessoa.isEmpty()){
+                        oRequestStatus.setRequestStatus(true);
+                    }
+
+                    obj.add(oRequestStatus);
                     obj.add(lstPessoa);
                     break;
                 }
 
                 case "obterPorID": {
 
-                    PessoaModel pessoaModel;
+                    PessoaModel oPessoaModel = pessoaBLL.ObterPessoaPorID(id);
 
-                    pessoaModel = pessoaBLL.ObterPessoaPorID(id);
-                    mensagem = "Registro encontrado com sucesso!";
-                    obj.add(mensagem);
-                    obj.add(pessoaModel);
+                    if(!oPessoaModel.equals(null)){
+                        oRequestStatus.setRequestStatus(true);
+                    }
+
+                    obj.add(oRequestStatus);
+                    obj.add(oPessoaModel);
+
                     break;
                 }
 
@@ -106,16 +113,22 @@ public class PessoaController extends HttpServlet {
                     PessoaModel pessoaModel = new PessoaModel(0,nome,sobrenome,dataNascimento,email,senha,"",false);
 
                     int Id = pessoaBLL.ObterPessoaPorEmailSenha(pessoaModel);
-                    mensagem = "Registro encontrado com sucesso!";
-                    obj.add(mensagem);
+                    if(Id != 0){
+                        oRequestStatus.setRequestStatus(true);
+                    }
+
+                    obj.add(oRequestStatus);
                     obj.add(Id);
+
+
                     break;
                 }
 
             }
 
         } else {
-            mensagem = "Não especificado parâmetro de ação";
+            mensagem = "inválido!";
+            obj.add(mensagem);
         }
 
         Type listOfLeituraObject = new TypeToken<Object>(){}.getType();

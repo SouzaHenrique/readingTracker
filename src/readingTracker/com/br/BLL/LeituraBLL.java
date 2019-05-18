@@ -85,7 +85,7 @@ public class LeituraBLL {
 
     }
 
-    public List<LeituraModel> listarLeituras(int id){
+    public List<LeituraModel> listarLeiturasPorLeitor(int id){
 
         List<LeituraModel> lstLeitura = new ArrayList<LeituraModel>();
 

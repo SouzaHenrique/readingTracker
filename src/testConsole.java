@@ -16,8 +16,10 @@ public class testConsole {
 
     public static void main(String[] args) {
 
+    double myDouble = 99999999999.99;
+    int myInt = 0;
 
-
+        myInt = (int) myDouble;
 
 
     }

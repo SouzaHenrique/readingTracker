@@ -1,25 +1,16 @@
 package readingTracker.com.br.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.LeituraBLL;
-import readingTracker.com.br.BLL.LivroBLL;
-import readingTracker.com.br.BLL.PessoaBLL;
-import readingTracker.com.br.model.LeituraModel;
-import readingTracker.com.br.model.LivroModel;
-import readingTracker.com.br.model.PessoaModel;
+import readingTracker.com.br.model.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.http.HttpSession;
+
 
 public class LeituraController extends HttpServlet{
 
@@ -33,7 +24,8 @@ public class LeituraController extends HttpServlet{
 
         LeituraModel oLeitura = new LeituraModel();
         LeituraBLL oLeituraBLL = new LeituraBLL();
-        String msg = "";
+        requestStatus oRequestStatus = new requestStatus(false);
+        String mensagem;
         Gson gson = new Gson();
         List<Object> obj = new ArrayList<>();
 
@@ -89,8 +81,6 @@ public class LeituraController extends HttpServlet{
 
         oLeitura.setDataterminoPlanejado(dataTerminoPlanejado);
 
-
-
         //CRUD de leitura de acordo com campo action informado
         if (action != null  && !action.isEmpty()) {
             switch (action) {
@@ -126,12 +116,10 @@ public class LeituraController extends HttpServlet{
 
                     //Inserção de nova leitura
                     if (oLeituraBLL.novaLeitura(oLeitura)) {
-                        msg = "Leitura cadastrada com sucesso!";
-                    } else {
-                        msg = "Não foi possivel cadastrar esta leitura!";
+                        oRequestStatus.setRequestStatus(true);
                     }
 
-                    obj.add(msg);
+                    obj.add(oRequestStatus);
                     break;
 
                 }
@@ -143,12 +131,10 @@ public class LeituraController extends HttpServlet{
                     oLeitura.setId_Livro(Integer.parseInt(request.getParameter("id_Livro")));
                     oLeitura.setId(Integer.parseInt(request.getParameter("id_Leitura"))); */
                     if (oLeituraBLL.editarLeitura(oLeitura)) {
-                        msg = "Leitura editada com sucesso!";
-                    } else {
-                        msg = "Não foi possivel editar esta leitura!";
+                        oRequestStatus.setRequestStatus(true);
                     }
 
-                    obj.add(msg);
+                    obj.add(oRequestStatus);
                     break;
                 }
 
@@ -156,13 +142,15 @@ public class LeituraController extends HttpServlet{
                     List<LeituraModel> lstLeitura;
 
                     //Consulta de Leituras por ID do usuario
-                    lstLeitura = oLeituraBLL.listarLeituras(oLeitura.getId_Leitor());
+                    lstLeitura = oLeituraBLL.listarLeiturasPorLeitor(oLeitura.getId_Leitor());
 
-                    Type listOfLeituraObject = new TypeToken<List<LeituraModel>>(){}.getType();
+                    if(!lstLeitura.isEmpty()){
+                        oRequestStatus.setRequestStatus(true);
+                    }
 
-                    String myJson = gson.toJson(lstLeitura,listOfLeituraObject);
+                    obj.add(oRequestStatus);
+                    obj.add(lstLeitura);
 
-                    obj.add(myJson);
 
                     break;
                 }
@@ -171,20 +159,28 @@ public class LeituraController extends HttpServlet{
 
                     //Obtem um objeto leitura
                     oLeitura = oLeituraBLL.obterLeitura(oLeitura.getId());
+
+                    if(!oLeitura.equals(null)){
+                        oRequestStatus.setRequestStatus(true);
+                    }
+
+                    obj.add(oRequestStatus);
                     obj.add(oLeitura);
 
                     break;
                 }
 
                 default:{
-                    msg = "Ação invalida!";
-                    obj.add(msg);
+                    mensagem = "Ação invalida!";
+                    obj.add(oRequestStatus);
+                    obj.add(mensagem);
                 }
 
             }
         }else{
-            msg = "falta açao!";
-            obj.add(msg);
+            mensagem = "falta açao!";
+            obj.add(oRequestStatus);
+            obj.add(mensagem);
         }
 
         //Serializa retorno e o envia

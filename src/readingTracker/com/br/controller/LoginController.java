@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import readingTracker.com.br.BLL.PessoaBLL;
-import readingTracker.com.br.model.PessoaModel;
+import readingTracker.com.br.model.*;
 
 public class LoginController extends HttpServlet {
 
@@ -34,6 +34,7 @@ public class LoginController extends HttpServlet {
         String acao = request.getParameter("action");
         String mensagem = "";
         List<Object> obj = new ArrayList<>();
+        requestStatus orequestStatus = new requestStatus(false);
 
         HttpSession session = request.getSession();
 
@@ -56,55 +57,33 @@ public class LoginController extends HttpServlet {
 
                                 session.setAttribute("ID", oPessoaModel.getId());
                                 session.setMaxInactiveInterval(30);
-                                mensagem = "Autenticação OK!";
-                                obj.add(oPessoaModel.getId());
-                                obj.add(mensagem);
-
-                            }else{
-                                mensagem = "Falha na autenticação!";
-                                obj.add(mensagem);
+                                orequestStatus.setRequestStatus(true);
                             }
 
-                        break;
-                    }
-
-                    case "login_android":{
-
-                        PessoaModel oPessoaModel = new PessoaModel();
-                        oPessoaModel.setEmail(emailForm);
-                        oPessoaModel.setSenha(senhaForm);
-
-                        boolean autenticado = isLoginValid(oPessoaModel);
-
-                        if (autenticado) {
-
-                            obj.add(oPessoaModel.getApiId());
-
-                        }else{
-                            mensagem = "Falha na autenticação!";
-                            obj.add(mensagem);
-                        }
+                            obj.add(orequestStatus);
+                            obj.add(oPessoaModel.getId());
 
                         break;
                     }
-
 
                     case "logoff":{
 
                         session.invalidate();
+                        orequestStatus.setRequestStatus(true);
 
-                        mensagem = "INVALIDATE_SESSION";
-                        obj.add(mensagem);
+                        obj.add(orequestStatus);
                         break;
                     }
                 }
             }else{
                 mensagem = "Falta ação (ações disponíveis: login ou logoff) ";
+                obj.add(orequestStatus);
                 obj.add(mensagem);
             }
 
         }else{
             mensagem = "Dados devem login devem ser preenchidos!";
+            obj.add(orequestStatus);
             obj.add(mensagem);
         }
 

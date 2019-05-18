@@ -4,7 +4,7 @@ package readingTracker.com.br.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import readingTracker.com.br.BLL.LivroBLL;
-import readingTracker.com.br.model.LivroModel;
+import readingTracker.com.br.model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,8 @@ public class LivroController extends HttpServlet {
 
         LivroModel oLivro;
         LivroBLL oLivroBLL = new LivroBLL();
+        List<Object> obj = new ArrayList<>();
+        requestStatus oRequestStatus = new requestStatus(false);
 
         String mensagem = "";
         int quantidadePaginas;
@@ -64,27 +67,16 @@ public class LivroController extends HttpServlet {
                 oLivro = new LivroModel(0,titulo,autor,anoPublicacao,editora,quantidadePaginas,quantidadeLeituras);
 
                 if(oLivroBLL.novoLivro(oLivro)){
-                    mensagem ="Livro cadastrado!";
-                }
-                else{
-                    mensagem = "Erro ao cadastrar o livro!";
+                    oRequestStatus.setRequestStatus(true);
                 }
 
-                String json = new Gson().toJson(mensagem);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
+                obj.add(oRequestStatus);
                 break;
             }
 
             case "edit":{
 
-                mensagem = "Não são permitidas nesta versão da ReadingTracker API alterações dos dados dos livros!";
-
-                String json = new Gson().toJson(mensagem);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(json);
+                obj.add(oRequestStatus);
                 break;
             }
 
@@ -94,12 +86,12 @@ public class LivroController extends HttpServlet {
 
                 List<LivroModel> lstLivro = oLivroBLL.buscaLivros();
 
-                Type listOfLivroObject = new TypeToken<List<LivroModel>>(){}.getType();
-                String myJson = new Gson().toJson(lstLivro,listOfLivroObject);
+                if(!lstLivro.isEmpty()){
+                    oRequestStatus.setRequestStatus(true);
+                }
 
-                response.setContentType("application/json");
-                response.setCharacterEncoding("utf-8");
-                response.getWriter().write(myJson);
+                obj.add(oRequestStatus);
+                obj.add(lstLivro);
 
                 break;
             }
@@ -112,20 +104,22 @@ public class LivroController extends HttpServlet {
             default:{
 
                 mensagem = "Ação invalida!";
-                response.setContentType("text/html");
-                PrintWriter out = response.getWriter();
-                out.println("falta açao!");
+                obj.add(mensagem);
             }
 
         }
 
         }else{
 
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.println("falta açao!");
+            mensagem = "falta açao!";
+            obj.add(mensagem);
 
         }
+
+        String json = new Gson().toJson(obj);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
     }
 
