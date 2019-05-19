@@ -144,7 +144,9 @@ public class LeituraController extends HttpServlet{
                     //Consulta de Leituras por ID do usuario
                     lstLeitura = oLeituraBLL.listarLeiturasPorLeitor(oLeitura.getId_Leitor());
 
-                    if(!lstLeitura.isEmpty()){
+                    if(lstLeitura == null || lstLeitura.isEmpty()){
+                        oRequestStatus.setRequestStatus(false);
+                    }else{
                         oRequestStatus.setRequestStatus(true);
                     }
 
