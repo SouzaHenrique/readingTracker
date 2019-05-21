@@ -8,6 +8,11 @@ public class LeituraModel {
     private int StatusLeitura;
     private int PaginasLidas;
     private String DataterminoPlanejado;
+    private String TituloDoLivro;
+    private int QuantidadePaginasLivro;
+
+    public LeituraModel() {
+    }
 
     public LeituraModel(int id, int id_Leitor, int id_Livro, int statusLeitura, int paginasLidas, String dataterminoPlanejado) {
         Id = id;
@@ -18,7 +23,15 @@ public class LeituraModel {
         DataterminoPlanejado = dataterminoPlanejado;
     }
 
-    public LeituraModel() {
+    public LeituraModel(int id, int id_leitor, int id_livro, int statusLeitura, int paginasLidas, String dataterminoPlanejado, String tituloDoLivo, int quantidadePaginasLivro){
+        Id = id;
+        Id_Leitor = id_leitor;
+        Id_Livro = id_livro;
+        StatusLeitura = statusLeitura;
+        PaginasLidas = paginasLidas;
+        DataterminoPlanejado = dataterminoPlanejado;
+        TituloDoLivro = tituloDoLivo;
+        QuantidadePaginasLivro = quantidadePaginasLivro;
     }
 
     public int getId() { return Id; }
@@ -44,4 +57,20 @@ public class LeituraModel {
     public String getDataterminoPlanejado() { return DataterminoPlanejado;  }
 
     public void setDataterminoPlanejado(String dataterminoPlanejado) { DataterminoPlanejado = dataterminoPlanejado; }
+
+    public String getTituloDoLivro() {
+        return TituloDoLivro;
+    }
+
+    public void setTituloDoLivro(String tituloDoLivro) {
+        TituloDoLivro = tituloDoLivro;
+    }
+
+    public int getQuantidadePaginasLivro() {
+        return QuantidadePaginasLivro;
+    }
+
+    public void setQuantidadePaginasLivro(int quantidadePaginasLivro) {
+        QuantidadePaginasLivro = quantidadePaginasLivro;
+    }
 }

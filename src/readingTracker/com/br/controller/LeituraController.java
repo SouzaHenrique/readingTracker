@@ -150,7 +150,7 @@ public class LeituraController extends HttpServlet{
                         oRequestStatus.setRequestStatus(true);
                     }
 
-                    obj.add(oRequestStatus);
+                    //obj.add(oRequestStatus);
                     obj.add(lstLeitura);
 
 
